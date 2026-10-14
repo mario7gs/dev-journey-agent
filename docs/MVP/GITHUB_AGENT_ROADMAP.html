@@ -69,10 +69,10 @@
       <h2 id="status-title">Current status</h2>
       <div class="grid">
         <div class="metric"><strong>Local MVP</strong><span class="status done">COMPLETE</span></div>
-        <div class="metric"><strong>GitHub-native path</strong><span class="status next">PLANNED</span></div>
-        <div class="metric"><strong>Private repository</strong><span class="status blocked">TOOL GAP</span></div>
+        <div class="metric"><strong>GitHub-native path</strong><span class="status done">ACTIVE</span></div>
+        <div class="metric"><strong>Private repository</strong><span class="status done">READY</span></div>
       </div>
-      <p class="callout"><strong>Repository creation:</strong> the GitHub connector is authenticated and repository listing works, but the exposed connector actions do not include a create-repository operation. No repository creation request was sent, and no credential was written to the project.</p>
+      <p class="callout"><strong>Repository:</strong> <code>mario7gs/dev-journey-agent</code> is private, uses <code>main</code>, and contains the reviewed baseline, CI quality workflow, packaged CLI, and manual planning action. No credential was written to the project.</p>
     </section>
 
     <section class="card" aria-labelledby="target-title">
@@ -87,8 +87,8 @@
     <section class="card" aria-labelledby="phases-title">
       <h2 id="phases-title">Implementation phases</h2>
       <div class="phase" data-number="0"><h3>Baseline and repository setup <span class="status done">DONE LOCALLY</span></h3><p>The local MVP has tests, CI definitions, exports, checkpoints, telemetry, a user journey guide, and operations documentation.</p><ul><li>Create or connect the private GitHub repository.</li><li>Tag the first local baseline release.</li><li>Keep secrets outside source, artifacts, and telemetry.</li></ul></div>
-      <div class="phase" data-number="1"><h3>Package the CLI <span class="status next">NEXT</span></h3><p>Make the agent installable and callable as a stable command rather than relying on checkout-specific path setup.</p><ul><li>Add a <code>dev-journey</code> console entry point.</li><li>Preserve <code>uv</code> lockfile and mock mode.</li><li>Document versioning and upgrade behavior.</li></ul></div>
-      <div class="phase" data-number="2"><h3>Manual GitHub Action <span class="status next">PLANNED</span></h3><p>Run the agent from a target repository without requiring a hosted backend.</p><ul><li>Support <code>workflow_dispatch</code> inputs: ticket, repo, branch, and mode.</li><li>Use least-privilege <code>contents: read</code> permissions.</li><li>Upload generated planning artifacts.</li></ul></div>
+      <div class="phase" data-number="1"><h3>Package the CLI <span class="status done">DONE</span></h3><p>Make the agent installable and callable as a stable command rather than relying on checkout-specific path setup.</p><ul><li>Add a <code>dev-journey</code> console entry point.</li><li>Preserve <code>uv</code> lockfile and mock mode.</li><li>Document versioning and upgrade behavior.</li></ul></div>
+      <div class="phase" data-number="2"><h3>Manual GitHub Action <span class="status done">DONE</span></h3><p>Run the agent from a target repository without requiring a hosted backend.</p><ul><li>Support <code>workflow_dispatch</code> inputs: ticket, repo, branch, and mode.</li><li>Use least-privilege <code>contents: read</code> permissions.</li><li>Upload generated planning artifacts.</li></ul></div>
       <div class="phase" data-number="3"><h3>Review and team signals <span class="status next">PLANNED</span></h3><p>Make results easy for a team to review without letting the agent silently change production code.</p><ul><li>Publish an approved/draft/needs-input status check.</li><li>Add optional issue or PR comments.</li><li>Keep code changes out of scope until explicit approval exists.</li></ul></div>
       <div class="phase" data-number="4"><h3>Security and persistence <span class="status next">PLANNED</span></h3><p>Move from a local run to a controlled CI execution model.</p><ul><li>Redact secrets and untrusted prompt content.</li><li>Persist checkpoints as controlled workflow artifacts.</li><li>Define telemetry retention and provider cost limits.</li></ul></div>
       <div class="phase" data-number="5"><h3>Release and adoption <span class="status next">PLANNED</span></h3><p>Validate the action against a fixture repository and publish a versioned release.</p><ul><li>Integration tests for normal, blocked, draft, and resumed runs.</li><li>Document team ownership and approval responsibilities.</li><li>Adopt the action in one real private repository.</li></ul></div>
@@ -125,7 +125,7 @@ jobs:
         with:
           name: dev-journey-plan
           path: docs/</code></pre>
-      <p class="muted">This is a design contract, not yet an active workflow. The action should be added only after the package entry point and private repository are ready.</p>
+      <p class="muted">The contract is active as <code>.github/workflows/dev-journey-plan.yml</code>. The workflow preserves expected blocking/provisional exit code 2 while uploading the generated evidence bundle.</p>
     </section>
 
     <section class="card" aria-labelledby="security-title">
@@ -149,11 +149,11 @@ jobs:
       <h2 id="queue-title">Next-session queue</h2>
       <p class="muted">Resume here when work continues. Complete each row in order and add evidence to this update log.</p>
       <table><thead><tr><th>Order</th><th>Task</th><th>Current state</th><th>Completion evidence</th></tr></thead><tbody>
-        <tr><td>1</td><td>Create an empty private GitHub repository named <code>dev-journey-agent</code>.</td><td><span class="status blocked">USER ACTION</span></td><td>Connector repository listing shows the new private repository.</td></tr>
-        <tr><td>2</td><td>Set local Git author identity and create the first <code>main</code> baseline commit.</td><td><span class="status next">QUEUED</span></td><td><code>git log</code> contains the baseline commit and no secrets are tracked.</td></tr>
-        <tr><td>3</td><td>Populate the private repository with the reviewed baseline and verify the default branch.</td><td><span class="status next">QUEUED</span></td><td>Remote file listing matches the local baseline; no credential files are present.</td></tr>
-        <tr><td>4</td><td>Add the <code>dev-journey</code> console entry point and document versioned installation.</td><td><span class="status next">QUEUED</span></td><td>A clean environment runs <code>dev-journey --help</code> and the existing test suite remains green.</td></tr>
-        <tr><td>5</td><td>Add the manual <code>workflow_dispatch</code> action with read-only permissions and artifact upload.</td><td><span class="status next">QUEUED</span></td><td>A fixture run produces Markdown, HTML, case-study, and optional PDF artifacts.</td></tr>
+        <tr><td>1</td><td>Create an empty private GitHub repository named <code>dev-journey-agent</code>.</td><td><span class="status done">DONE</span></td><td>Private repository <code>mario7gs/dev-journey-agent</code> verified with default branch <code>main</code>.</td></tr>
+        <tr><td>2</td><td>Set local Git author identity and create the first <code>main</code> baseline commit.</td><td><span class="status done">DONE</span></td><td>Baseline commit <code>c5cea69</code> was pushed; author identity is the authenticated GitHub profile.</td></tr>
+        <tr><td>3</td><td>Populate the private repository with the reviewed baseline and verify the default branch.</td><td><span class="status done">DONE</span></td><td>Remote <code>main</code> contains the baseline, CI workflow, and no credential files.</td></tr>
+        <tr><td>4</td><td>Add the <code>dev-journey</code> console entry point and document versioned installation.</td><td><span class="status done">DONE</span></td><td><code>uv run dev-journey --help</code> passes; package metadata exposes the stable console command.</td></tr>
+        <tr><td>5</td><td>Add the manual <code>workflow_dispatch</code> action with read-only permissions and artifact upload.</td><td><span class="status done">DONE</span></td><td>Action <code>.github/workflows/dev-journey-plan.yml</code> is present with <code>contents: read</code> and artifact upload.</td></tr>
         <tr><td>6</td><td>Exercise blocked, draft, normal, and resumed runs, then prepare the first private-repository release.</td><td><span class="status next">QUEUED</span></td><td>Run evidence, release tag, ownership notes, and roadmap update are committed.</td></tr>
       </tbody></table>
     </section>
@@ -164,8 +164,9 @@ jobs:
         <tr><td>2026-10-12</td><td>Documented GitHub-native implementation path</td><td><span class="status done">DONE</span></td><td>This living HTML roadmap was added and linked from the project documentation.</td></tr>
         <tr><td>2026-10-12</td><td>Initialized local Git baseline</td><td><span class="status done">READY</span></td><td>Local <code>main</code> branch is initialized; no commit was created because no Git author identity is configured.</td></tr>
         <tr><td>2026-10-12</td><td>GitHub connector authentication</td><td><span class="status done">VERIFIED</span></td><td>Authenticated account access and private repository listing were verified through the GitHub plugin.</td></tr>
-        <tr><td>2026-10-12</td><td>Private repository creation</td><td><span class="status blocked">TOOL GAP</span></td><td>The connector exposes repository read/write operations but no create-repository operation; no external mutation was attempted.</td></tr>
-        <tr><td>Next step</td><td>Create private repository and push baseline</td><td><span class="status blocked">BLOCKED</span></td><td>Create the empty private repository in GitHub UI, or enable a connector operation that can create repositories; then push the local baseline.</td></tr>
+        <tr><td>2026-10-14</td><td>Private repository connected</td><td><span class="status done">DONE</span></td><td><code>mario7gs/dev-journey-agent</code> verified private with push access and default branch <code>main</code>.</td></tr>
+        <tr><td>2026-10-14</td><td>Baseline, CLI package, and manual action</td><td><span class="status done">DONE</span></td><td>Baseline and CI are on <code>main</code>; the console command and manual workflow are published; 55 tests, lint, type checks, and HTML parsing pass.</td></tr>
+        <tr><td>Next step</td><td>Exercise all run modes and prepare the first release tag</td><td><span class="status next">NEXT</span></td><td>Run blocked, draft, normal, and resumed scenarios, then publish the first private-repository release.</td></tr>
       </tbody></table>
     </section>
 
