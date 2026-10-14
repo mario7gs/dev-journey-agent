@@ -24,7 +24,7 @@ class _Parser(HTMLParser):
     pass
 
 
-for path in (Path("docs/IMPLEMENTATION_DASHBOARD.html"), Path("src/templates/case_study.html.j2")):
+for path in (Path("docs/MVP/IMPLEMENTATION_DASHBOARD.html"), Path("src/templates/case_study.html.j2")):
     _Parser().feed(path.read_text(encoding="utf-8"))
     print(f"HTML parse passed: {path}")
 PY

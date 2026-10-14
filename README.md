@@ -42,8 +42,13 @@ The GitHub-native transformation is tracked in the living [GitHub agent roadmap]
 ```bash
 uv sync --extra dev
 uv run pytest
-uv run python src/main.py --ticket "Add search" --repo owner/name --branch main
+uv run dev-journey --ticket "Add search" --repo owner/name --branch main
 ```
+
+The package exposes the same pipeline through the `dev-journey` console
+command. For a clean environment, install the locked project and invoke
+`dev-journey --help`; the repository also includes a manual GitHub Action under
+**Actions → Dev Journey plan**.
 
 No API keys are required for deterministic mock mode (`USE_MOCK_LLM=true` default).
 The default blocking mode exits with `NEEDS_INPUT` when refinement finds unresolved questions.

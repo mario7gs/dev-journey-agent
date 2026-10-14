@@ -12,6 +12,9 @@ dependencies = [
   "litellm>=1.0",
 ]
 
+[project.scripts]
+dev-journey = "main:main"
+
 [project.optional-dependencies]
 dev = [
   "pytest>=8.0",
@@ -41,4 +44,5 @@ build-backend = "hatchling.build"
 packages = ["config", "src/agents", "src/core", "src/schemas", "src/tools"]
 
 [tool.hatch.build.targets.wheel.force-include]
+"src/main.py" = "main.py"
 "src/templates" = "templates"
