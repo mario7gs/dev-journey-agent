@@ -9,10 +9,18 @@ REDACTED = "[REDACTED]"
 _SECRET_PATTERNS = (
     re.compile(r"-----BEGIN [^-]+ PRIVATE KEY-----[\s\S]+?-----END [^-]+ PRIVATE KEY-----"),
     re.compile(r"\b(?:sk-(?:proj|live)-[A-Za-z0-9_-]{10,}|gh[pousr]_[A-Za-z0-9_]{10,}|github_pat_[A-Za-z0-9_]{10,})\b"),
-    re.compile(r"(?i)(\b(?:api[_-]?key|access[_-]?token|auth(?:orization)?|password|passwd|secret|client[_-]?secret)\b\s*[:=]\s*)([^\s,;]+)"),
+    re.compile(r"\bAKIA[0-9A-Z]{16}\b"),
+    re.compile(
+        r"(?i)(\b(?:api[_-]?key|access[_-]?token|auth(?:orization)?|"
+        r"aws[_-](?:secret[_-])?access[_-]?key|github[_-]?token|"
+        r"password|passwd|secret|client[_-]?secret)\b\s*[:=]\s*)([^\s,;]+)"
+    ),
     re.compile(r"(?i)(https?://)([^/\s:@]+):([^@\s]+)@"),
 )
-_SENSITIVE_KEYS = re.compile(r"(?i)(?:api[_-]?key|access[_-]?token|authorization|password|passwd|secret|private[_-]?key)")
+_SENSITIVE_KEYS = re.compile(
+    r"(?i)(?:api[_-]?key|access[_-]?token|authorization|github[_-]?token|"
+    r"password|passwd|secret|private[_-]?key|(?:^|[_-])token(?:$|[_-]))"
+)
 
 
 def redact_text(value: str) -> str:
