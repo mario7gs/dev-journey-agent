@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Living implementation path for turning Dev Journey Agent into a GitHub-native agent.">
+  <meta name="theme-color" content="#0b1220">
+  <title>Dev Journey Agent · GitHub implementation path</title>
+  <style>
+    :root { --ink:#0b1220; --ink-soft:#1e293b; --slate:#475569; --muted:#64748b; --mist:#f4f7fb; --paper:#fff; --indigo:#3157d5; --indigo-soft:#e8edff; --teal:#0f8b8d; --teal-soft:#ddf3f2; --line:#d8e0ec; --success:#18794e; --success-soft:#def7e8; --warning:#9a6700; --warning-soft:#fff3d6; --shadow:0 14px 36px rgba(15,23,42,.07); }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin:0; color:var(--ink); background:var(--mist); font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; line-height:1.55; }
+    a { color:var(--indigo); }
+    header { color:var(--paper); padding:2rem max(1.2rem,calc((100vw - 1120px)/2)) 4.8rem; background:radial-gradient(circle at 85% 20%,rgba(15,139,141,.34),transparent 32%),linear-gradient(135deg,var(--ink),#12243a 58%,#163f52); }
+    .lockup { display:flex; align-items:center; gap:.85rem; }
+    .mark { width:3.6rem; height:3.6rem; }
+    .mark img { width:100%; height:100%; display:block; filter:drop-shadow(0 8px 18px rgba(0,0,0,.2)); }
+    .brand-name { font-size:.78rem; font-weight:800; letter-spacing:.16em; line-height:1.2; }
+    .brand-subtitle { margin-top:.25rem; color:rgba(255,255,255,.7); font-size:.68rem; letter-spacing:.1em; }
+    .eyebrow { margin:3.2rem 0 .5rem; color:#55c6c4; font-size:.72rem; font-weight:800; letter-spacing:.14em; text-transform:uppercase; }
+    h1 { max-width:820px; margin:0; font-size:clamp(2.4rem,6vw,4.7rem); line-height:1; letter-spacing:-.055em; }
+    .hero-copy { max-width:700px; margin:1.1rem 0 0; color:rgba(255,255,255,.8); font-size:1.08rem; }
+    main { max-width:1120px; margin:-2.4rem auto 3.5rem; padding:0 1.2rem; }
+    .card { margin:1.1rem 0; padding:clamp(1.2rem,3vw,1.9rem); border:1px solid var(--line); border-radius:1.1rem; background:var(--paper); box-shadow:var(--shadow); }
+    .summary { border-top:3px solid var(--teal); }
+    .grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.8rem; }
+    .two-col { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1rem; }
+    h2 { margin:0 0 .65rem; color:var(--ink-soft); font-size:clamp(1.35rem,3vw,2rem); letter-spacing:-.035em; }
+    h3 { margin:0 0 .3rem; color:var(--ink-soft); font-size:1.05rem; }
+    p { margin:.55rem 0; }
+    .muted { color:var(--muted); }
+    .metric { padding:1rem; border:1px solid var(--line); border-radius:.8rem; background:var(--mist); }
+    .metric strong { display:block; color:var(--indigo); font-size:1.45rem; }
+    .metric span { color:var(--muted); font-size:.82rem; }
+    .callout { padding:1rem 1.1rem; border-left:3px solid var(--teal); border-radius:.6rem; color:var(--ink-soft); background:var(--teal-soft); }
+    .status { display:inline-block; padding:.2rem .6rem; border-radius:999px; font-size:.72rem; font-weight:800; letter-spacing:.04em; }
+    .done { color:var(--success); background:var(--success-soft); }
+    .next { color:#294aa7; background:var(--indigo-soft); }
+    .blocked { color:var(--warning); background:var(--warning-soft); }
+    .phase { position:relative; padding:1.1rem 1.1rem 1.1rem 3.5rem; border:1px solid var(--line); border-radius:.9rem; background:var(--paper); }
+    .phase::before { content:attr(data-number); position:absolute; left:1rem; top:1.1rem; display:grid; place-items:center; width:1.8rem; height:1.8rem; border-radius:50%; color:var(--paper); background:var(--indigo); font-size:.75rem; font-weight:800; }
+    .phase + .phase { margin-top:.7rem; }
+    .phase p { color:var(--muted); font-size:.92rem; }
+    .phase ul { margin:.55rem 0 0; padding-left:1.1rem; color:var(--slate); font-size:.9rem; }
+    code { padding:.12rem .35rem; border-radius:.3rem; color:#294aa7; background:var(--indigo-soft); font: .88em "JetBrains Mono",ui-monospace,monospace; }
+    pre { overflow:auto; margin:0; padding:1rem; border-radius:.75rem; color:#dce7ff; background:#10182a; font:.82rem/1.65 "JetBrains Mono",ui-monospace,monospace; }
+    table { width:100%; border-collapse:collapse; font-size:.9rem; }
+    th,td { padding:.7rem .55rem; border-bottom:1px solid var(--line); text-align:left; vertical-align:top; }
+    th { color:var(--muted); font-size:.7rem; letter-spacing:.08em; text-transform:uppercase; }
+    .checklist { display:grid; gap:.55rem; margin:0; padding:0; list-style:none; }
+    .checklist li { display:flex; gap:.55rem; align-items:flex-start; }
+    .checklist li::before { content:"✓"; display:grid; place-items:center; flex:0 0 1.2rem; height:1.2rem; border-radius:50%; color:var(--success); background:var(--success-soft); font-weight:800; }
+    footer { max-width:1120px; margin:0 auto; padding:0 1.2rem 2rem; color:var(--muted); text-align:center; font-size:.8rem; }
+    @media (max-width:760px) { .grid,.two-col { grid-template-columns:1fr; } .card { overflow-x:auto; } table { min-width:680px; } }
+    @media print { @page { size:A4; margin:12mm; } body { background:#fff; font-size:10pt; } header { margin:-12mm -12mm 0; padding:12mm; print-color-adjust:exact; } main { margin:-1rem 0 2rem; padding:0; } .card,.phase { box-shadow:none; break-inside:avoid; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="lockup"><div class="mark"><img src="../assets/dj-mark.png" alt="Dev Journey Agent mark"></div><div><div class="brand-name">DEV JOURNEY</div><div class="brand-subtitle">AGENT · GITHUB IMPLEMENTATION PATH</div></div></div>
+    <div class="eyebrow">Living delivery plan</div>
+    <h1>Turn the local MVP into a GitHub-native agent.</h1>
+    <p class="hero-copy">This document is the source of truth for the transition from a tested local CLI to a private, reviewable GitHub Action that produces planning evidence without exposing credentials or making unreviewed code changes.</p>
+  </header>
+
+  <main>
+    <section class="card summary" aria-labelledby="status-title">
+      <h2 id="status-title">Current status</h2>
+      <div class="grid">
+        <div class="metric"><strong>Local MVP</strong><span class="status done">COMPLETE</span></div>
+        <div class="metric"><strong>GitHub-native path</strong><span class="status next">PLANNED</span></div>
+        <div class="metric"><strong>Private repository</strong><span class="status blocked">TOOL GAP</span></div>
+      </div>
+      <p class="callout"><strong>Repository creation:</strong> the GitHub connector is authenticated and repository listing works, but the exposed connector actions do not include a create-repository operation. No repository creation request was sent, and no credential was written to the project.</p>
+    </section>
+
+    <section class="card" aria-labelledby="target-title">
+      <h2 id="target-title">Target operating model</h2>
+      <div class="two-col">
+        <div><h3>Developer experience</h3><p>A developer starts a manual workflow with a ticket, repository, branch, and mode. The action runs the same validated pipeline as the local CLI and uploads Markdown, HTML, PDF, and case-study artifacts.</p></div>
+        <div><h3>Engineering control</h3><p>The responsible engineer owns repository permissions, model credentials, artifact retention, approval policy, and the decision to add issue or pull-request comments later.</p></div>
+      </div>
+      <p class="muted">Recommended first integration: <code>workflow_dispatch</code> with read-only repository access. Add automatic issue/PR triggers only after the manual flow is trusted.</p>
+    </section>
+
+    <section class="card" aria-labelledby="phases-title">
+      <h2 id="phases-title">Implementation phases</h2>
+      <div class="phase" data-number="0"><h3>Baseline and repository setup <span class="status done">DONE LOCALLY</span></h3><p>The local MVP has tests, CI definitions, exports, checkpoints, telemetry, a user journey guide, and operations documentation.</p><ul><li>Create or connect the private GitHub repository.</li><li>Tag the first local baseline release.</li><li>Keep secrets outside source, artifacts, and telemetry.</li></ul></div>
+      <div class="phase" data-number="1"><h3>Package the CLI <span class="status next">NEXT</span></h3><p>Make the agent installable and callable as a stable command rather than relying on checkout-specific path setup.</p><ul><li>Add a <code>dev-journey</code> console entry point.</li><li>Preserve <code>uv</code> lockfile and mock mode.</li><li>Document versioning and upgrade behavior.</li></ul></div>
+      <div class="phase" data-number="2"><h3>Manual GitHub Action <span class="status next">PLANNED</span></h3><p>Run the agent from a target repository without requiring a hosted backend.</p><ul><li>Support <code>workflow_dispatch</code> inputs: ticket, repo, branch, and mode.</li><li>Use least-privilege <code>contents: read</code> permissions.</li><li>Upload generated planning artifacts.</li></ul></div>
+      <div class="phase" data-number="3"><h3>Review and team signals <span class="status next">PLANNED</span></h3><p>Make results easy for a team to review without letting the agent silently change production code.</p><ul><li>Publish an approved/draft/needs-input status check.</li><li>Add optional issue or PR comments.</li><li>Keep code changes out of scope until explicit approval exists.</li></ul></div>
+      <div class="phase" data-number="4"><h3>Security and persistence <span class="status next">PLANNED</span></h3><p>Move from a local run to a controlled CI execution model.</p><ul><li>Redact secrets and untrusted prompt content.</li><li>Persist checkpoints as controlled workflow artifacts.</li><li>Define telemetry retention and provider cost limits.</li></ul></div>
+      <div class="phase" data-number="5"><h3>Release and adoption <span class="status next">PLANNED</span></h3><p>Validate the action against a fixture repository and publish a versioned release.</p><ul><li>Integration tests for normal, blocked, draft, and resumed runs.</li><li>Document team ownership and approval responsibilities.</li><li>Adopt the action in one real private repository.</li></ul></div>
+    </section>
+
+    <section class="card" aria-labelledby="workflow-title">
+      <h2 id="workflow-title">First workflow contract</h2>
+      <pre><code>name: Dev Journey plan
+
+on:
+  workflow_dispatch:
+    inputs:
+      ticket:
+        required: true
+        type: string
+      mode:
+        required: true
+        default: blocking
+        type: choice
+        options: [blocking, draft]
+
+permissions:
+  contents: read
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Dev Journey Agent
+        # Pin a released agent version before team adoption.
+        run: dev-journey --ticket "${{ inputs.ticket }}" --mode "${{ inputs.mode }}"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dev-journey-plan
+          path: docs/</code></pre>
+      <p class="muted">This is a design contract, not yet an active workflow. The action should be added only after the package entry point and private repository are ready.</p>
+    </section>
+
+    <section class="card" aria-labelledby="security-title">
+      <h2 id="security-title">Non-negotiable safeguards</h2>
+      <ul class="checklist"><li>Never place GitHub tokens, model keys, or short-lived credentials in the repository or generated documents.</li><li>Start with read-only permissions and manual dispatch.</li><li>Treat tickets and repository files as untrusted input that may contain prompt-injection text.</li><li>Keep approval with a human reviewer; do not auto-merge or auto-edit code in the first release.</li><li>Redact telemetry and configure retention before enabling external collectors.</li></ul>
+    </section>
+
+    <section class="card" aria-labelledby="acceptance-title">
+      <h2 id="acceptance-title">Definition of done for the first GitHub release</h2>
+      <table><thead><tr><th>Area</th><th>Acceptance evidence</th></tr></thead><tbody>
+        <tr><td>Install</td><td>A clean runner installs the pinned agent and invokes <code>dev-journey --help</code>.</td></tr>
+        <tr><td>Execution</td><td>A manual workflow produces Markdown, stakeholder HTML, case-study HTML, and PDF when a renderer is available.</td></tr>
+        <tr><td>Trust</td><td>Blocking mode stops unresolved requests; draft mode stays visibly provisional.</td></tr>
+        <tr><td>Recovery</td><td>An interrupted run resumes from a checkpoint without repeating completed model stages.</td></tr>
+        <tr><td>Security</td><td>Workflow permissions are least-privilege and no secrets appear in artifacts or logs.</td></tr>
+        <tr><td>Review</td><td>A senior engineer can inspect the evidence and approve or reject the plan without editing generated files.</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="card" aria-labelledby="queue-title">
+      <h2 id="queue-title">Next-session queue</h2>
+      <p class="muted">Resume here when work continues. Complete each row in order and add evidence to this update log.</p>
+      <table><thead><tr><th>Order</th><th>Task</th><th>Current state</th><th>Completion evidence</th></tr></thead><tbody>
+        <tr><td>1</td><td>Create an empty private GitHub repository named <code>dev-journey-agent</code>.</td><td><span class="status blocked">USER ACTION</span></td><td>Connector repository listing shows the new private repository.</td></tr>
+        <tr><td>2</td><td>Set local Git author identity and create the first <code>main</code> baseline commit.</td><td><span class="status next">QUEUED</span></td><td><code>git log</code> contains the baseline commit and no secrets are tracked.</td></tr>
+        <tr><td>3</td><td>Populate the private repository with the reviewed baseline and verify the default branch.</td><td><span class="status next">QUEUED</span></td><td>Remote file listing matches the local baseline; no credential files are present.</td></tr>
+        <tr><td>4</td><td>Add the <code>dev-journey</code> console entry point and document versioned installation.</td><td><span class="status next">QUEUED</span></td><td>A clean environment runs <code>dev-journey --help</code> and the existing test suite remains green.</td></tr>
+        <tr><td>5</td><td>Add the manual <code>workflow_dispatch</code> action with read-only permissions and artifact upload.</td><td><span class="status next">QUEUED</span></td><td>A fixture run produces Markdown, HTML, case-study, and optional PDF artifacts.</td></tr>
+        <tr><td>6</td><td>Exercise blocked, draft, normal, and resumed runs, then prepare the first private-repository release.</td><td><span class="status next">QUEUED</span></td><td>Run evidence, release tag, ownership notes, and roadmap update are committed.</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="card" aria-labelledby="log-title">
+      <h2 id="log-title">Update log</h2>
+      <table><thead><tr><th>Date</th><th>Step</th><th>Status</th><th>Evidence</th></tr></thead><tbody>
+        <tr><td>2026-10-12</td><td>Documented GitHub-native implementation path</td><td><span class="status done">DONE</span></td><td>This living HTML roadmap was added and linked from the project documentation.</td></tr>
+        <tr><td>2026-10-12</td><td>Initialized local Git baseline</td><td><span class="status done">READY</span></td><td>Local <code>main</code> branch is initialized; no commit was created because no Git author identity is configured.</td></tr>
+        <tr><td>2026-10-12</td><td>GitHub connector authentication</td><td><span class="status done">VERIFIED</span></td><td>Authenticated account access and private repository listing were verified through the GitHub plugin.</td></tr>
+        <tr><td>2026-10-12</td><td>Private repository creation</td><td><span class="status blocked">TOOL GAP</span></td><td>The connector exposes repository read/write operations but no create-repository operation; no external mutation was attempted.</td></tr>
+        <tr><td>Next step</td><td>Create private repository and push baseline</td><td><span class="status blocked">BLOCKED</span></td><td>Create the empty private repository in GitHub UI, or enable a connector operation that can create repositories; then push the local baseline.</td></tr>
+      </tbody></table>
+    </section>
+
+    <section class="card" aria-labelledby="links-title"><h2 id="links-title">Project references</h2><p><a href="../../README.md">README</a> · <a href="IMPLEMENTATION_DASHBOARD.html">implementation dashboard</a> · <a href="USER_JOURNEY.html">user journey guide</a> · <a href="../OPERATIONS.md">operations notes</a> · <a href="IMPLEMENTATION_ROADMAP.md">implementation roadmap</a></p></section>
+  </main>
+  <footer>Dev Journey Agent · Living GitHub implementation path · Update this file after every delivery step</footer>
+</body>
+</html>

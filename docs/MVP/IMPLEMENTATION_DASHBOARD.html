@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1220">
+  <title>Dev Journey Agent — Implementation Dashboard</title>
+  <style>
+    :root {
+      --ink: #0b1220;
+      --ink-soft: #1e293b;
+      --slate: #475569;
+      --muted: #64748b;
+      --mist: #f4f7fb;
+      --paper: #ffffff;
+      --indigo: #3157d5;
+      --indigo-soft: #e8edff;
+      --teal: #0f8b8d;
+      --teal-soft: #ddf3f2;
+      --gold: #c89b3c;
+      --line: #d8e0ec;
+      --success: #18794e;
+      --success-soft: #def7e8;
+      --warning: #9a6700;
+      --warning-soft: #fff3d6;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--mist);
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+    header {
+      color: var(--paper);
+      padding: 2.2rem max(1.2rem, calc((100vw - 1080px) / 2)) 4.2rem;
+      background:
+        radial-gradient(circle at 84% 18%, rgba(15, 139, 141, .30), transparent 32%),
+        linear-gradient(135deg, var(--ink), #12243a 56%, #163f52);
+    }
+    .lockup { display: flex; align-items: center; gap: .85rem; }
+    .mark { width: 3.6rem; height: 3.6rem; flex: 0 0 auto; filter: drop-shadow(0 8px 18px rgba(0,0,0,.2)); }
+    .mark img { width: 100%; height: 100%; display: block; }
+    .brand-name { font-size: .78rem; font-weight: 800; letter-spacing: .16em; line-height: 1.2; }
+    .brand-subtitle { margin-top: .25rem; color: rgba(255,255,255,.7); font-size: .68rem; letter-spacing: .1em; }
+    .eyebrow { margin: 3.1rem 0 .45rem; color: #55c6c4; font-size: .72rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+    h1 { max-width: 780px; margin: 0; font-size: clamp(2rem, 5vw, 3.45rem); line-height: 1.04; letter-spacing: -.045em; }
+    .hero-copy { max-width: 700px; margin: 1rem 0 0; color: rgba(255,255,255,.77); font-size: 1.05rem; }
+    .hero-meta { margin-top: 1.25rem; color: rgba(255,255,255,.68); font-size: .82rem; }
+    main { max-width: 1080px; margin: -2.1rem auto 3rem; padding: 0 1.2rem; }
+    .card {
+      margin: 1rem 0;
+      padding: 1.45rem 1.6rem;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: 0 10px 28px rgba(15, 23, 42, .045);
+    }
+    .summary { border-top: 3px solid var(--teal); }
+    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+    .metric { padding: 1rem; background: var(--mist); border: 1px solid var(--line); border-radius: 12px; }
+    .metric-value { display: block; color: var(--indigo); font-size: 1.8rem; font-weight: 800; line-height: 1; }
+    .metric-label { display: block; margin-top: .45rem; color: var(--slate); font-size: .84rem; }
+    h2 { margin: 0 0 .75rem; color: var(--ink-soft); font-size: 1.3rem; letter-spacing: -.02em; }
+    h3 { margin: 1.2rem 0 .45rem; color: var(--ink-soft); font-size: 1rem; }
+    p { margin: .5rem 0; }
+    .muted { color: var(--muted); }
+    .status { display: inline-block; padding: .2rem .62rem; border-radius: 999px; font-size: .74rem; font-weight: 750; white-space: nowrap; }
+    .done { color: var(--success); background: var(--success-soft); }
+    .next { color: #294aa7; background: var(--indigo-soft); }
+    .planned { color: var(--warning); background: var(--warning-soft); }
+    table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+    th, td { padding: .7rem .55rem; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+    th { color: var(--muted); font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; }
+    code { padding: .12rem .36rem; color: #294aa7; background: var(--indigo-soft); border-radius: 5px; font-family: "JetBrains Mono", ui-monospace, monospace; font-size: .82em; }
+    ul { padding-left: 1.2rem; }
+    li + li { margin-top: .4rem; }
+    a { color: var(--indigo); }
+    .callout { padding: .9rem 1rem; color: var(--ink-soft); background: var(--teal-soft); border-left: 3px solid var(--teal); border-radius: 8px; }
+    footer { padding: 1.8rem; color: var(--muted); text-align: center; font-size: .78rem; }
+    @media (max-width: 760px) {
+      header { padding-bottom: 3.2rem; }
+      .grid { grid-template-columns: 1fr; }
+      .card { padding: 1.15rem; overflow-x: auto; }
+      table { min-width: 680px; }
+    }
+    @media print {
+      @page { size: A4; margin: 13mm; }
+      body { background: #fff; font-size: 10pt; }
+      header { margin: -13mm -13mm 0; padding: 14mm 13mm 18mm; print-color-adjust: exact; }
+      main { margin: -10mm 0 0; padding: 0; }
+      .card { box-shadow: none; break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="lockup">
+      <div class="mark"><img src="../assets/dj-mark.png" alt="Dev Journey Agent mark"></div>
+      <div>
+        <div class="brand-name">DEV JOURNEY</div>
+        <div class="brand-subtitle">AGENT · FEATURE PLANNING COPILOT</div>
+      </div>
+    </div>
+    <div class="eyebrow">Implementation dashboard</div>
+    <h1>Operational and portfolio foundation complete.</h1>
+    <p class="hero-copy">The planning pipeline, durable recovery, run-cost evidence, portfolio exports, and release checks are implemented. The remaining work is routine maintenance and future enhancements.</p>
+    <div class="hero-meta">Last verified: 2026-10-12 · Source: <code>docs/MVP/IMPLEMENTATION_ROADMAP.md</code></div>
+  </header>
+
+  <main>
+    <section class="card summary" aria-labelledby="summary-title">
+      <h2 id="summary-title">Current status</h2>
+      <div class="grid">
+        <div class="metric"><span class="metric-value">5</span><span class="metric-label">delivery tracks complete</span></div>
+        <div class="metric"><span class="metric-value">0</span><span class="metric-label">queued tracks remaining</span></div>
+        <div class="metric"><span class="metric-value">55</span><span class="metric-label">automated tests passing</span></div>
+      </div>
+      <p class="callout"><strong>Current state:</strong> all roadmap tracks are implemented. Ongoing work is maintenance, live renderer verification, and future product enhancements.</p>
+    </section>
+
+    <section class="card" aria-labelledby="roadmap-title">
+      <h2 id="roadmap-title">Delivery roadmap</h2>
+      <table>
+        <caption class="muted">Implemented and remaining project work</caption>
+        <thead><tr><th>Track</th><th>Status</th><th>Evidence</th><th>Remaining work</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Core planning pipeline</strong></td>
+            <td><span class="status done">DONE</span></td>
+            <td>Steps 0–4, blocking/draft modes, traceability, critic gate, and Markdown/HTML export.</td>
+            <td>Maintain while release polish is added.</td>
+          </tr>
+          <tr>
+            <td><strong>Durable checkpoints and resume</strong></td>
+            <td><span class="status done">DONE</span></td>
+            <td>Atomic versioned checkpoints, validated state, <code>--resume</code>, and blocking-mode preservation.</td>
+            <td>Use checkpoint evidence in release documentation.</td>
+          </tr>
+          <tr>
+            <td><strong>Observability and run-cost evidence</strong></td>
+            <td><span class="status done">DONE</span></td>
+            <td>Optional JSONL stage events, latency, model fallback, token/cost metadata, gate events, and Phoenix span bridge.</td>
+            <td>Exercise with a live Phoenix collector when deployment infrastructure is available.</td>
+          </tr>
+          <tr>
+            <td><strong>PDF and presentation export</strong></td>
+            <td><span class="status done">DONE</span></td>
+            <td>Print-safe stakeholder PDF, 16:9 case-study HTML/PDF, embedded PNG branding, semantic headings, and renderer tests.</td>
+            <td>Use a live browser or CI renderer for final visual review when deployment infrastructure is available.</td>
+          </tr>
+          <tr>
+            <td><strong>Release and portfolio polish</strong></td>
+            <td><span class="status done">DONE</span></td>
+            <td>CI workflow, local verification script, deterministic demo artifact workflow, operations documentation, and README entry point.</td>
+            <td>Routine maintenance, live PDF renderer verification, and future product enhancements.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card" aria-labelledby="working-title">
+      <h2 id="working-title">Working now</h2>
+      <ul>
+        <li>Blocking mode is the default; unresolved refinement questions stop approval.</li>
+        <li>Draft mode remains explicitly provisional.</li>
+        <li>Mock execution is deterministic; real execution uses the configured LiteLLM fallback chain.</li>
+        <li>Stable IDs connect requirements, contracts, acceptance criteria, tests, security checks, and implementation steps.</li>
+        <li>Every completed stage can be resumed without repeating completed LLM work.</li>
+        <li>Telemetry is disabled by default and fails open when enabled.</li>
+      </ul>
+    </section>
+
+    <section class="card" aria-labelledby="next-title">
+      <h2 id="next-title">Ongoing maintenance</h2>
+      <p>All planned implementation tracks are complete. Keep the release checks green, run the deterministic demo when artifacts need refreshing, and perform final PDF visual review in an environment with a working Chromium renderer.</p>
+      <p class="muted">Reference: <a href="IMPLEMENTATION_ROADMAP.md">implementation roadmap</a> · <a href="GITHUB_AGENT_ROADMAP.html">GitHub agent path</a> · <a href="../OPERATIONS.md">operations notes</a> · <a href="USER_JOURNEY.html">user journey</a> · <a href="../BRAND_GUIDELINES.html">brand guidelines</a></p>
+    </section>
+  </main>
+
+  <footer>Dev Journey Agent · Evidence-driven implementation status</footer>
+</body>
+</html>

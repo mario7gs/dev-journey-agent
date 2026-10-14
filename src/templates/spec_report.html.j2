@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0B1220">
+<title>{{ title }}</title>
+<style>
+{% include 'assets/brand.css' %}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand-lockup">
+    <div class="brand-mark-frame"><img src="{{ brand_mark_png_data_uri }}" alt="Dev Journey Agent mark"></div>
+    <div>
+      <div class="brand-name">DEV JOURNEY</div>
+      <div class="brand-subtitle">AGENT · FEATURE PLANNING COPILOT</div>
+    </div>
+  </div>
+  <div class="meta">{{ repo_ref }} · {{ branch }}</div>
+  <h1>{{ title }}</h1>
+  <div class="meta">Evidence-driven stakeholder report · {{ ticket }}</div>
+  <div class="meta">Status: {{ status|upper }} · Mode: {{ mode }}{% if run_id %} · Run {{ run_id }}{% endif %}</div>
+</header>
+<main>
+  {% if block_reasons or errors %}
+  <section class="card">
+    <h2>Pipeline status</h2>
+    {% if block_reasons %}<h3>Blocking reasons</h3><ul>{% for reason in block_reasons %}<li>{{ reason }}</li>{% endfor %}</ul>{% endif %}
+    {% if errors %}<h3>Errors</h3><ul>{% for error in errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+  </section>
+  {% endif %}
+
+  <section class="card">
+    <h2>Critic Gate
+      {% if status == 'approved' %}<span class="pill ok">APPROVED</span>
+      {% elif status == 'draft' %}<span class="pill info">DRAFT</span>
+      {% else %}<span class="pill warn">NEEDS INPUT</span>{% endif %}
+    </h2>
+    {% for i in critic.get('issues', []) or [] %}
+    <p><strong>[{{ i.get('severity') }}]</strong> {{ i.get('area') }}: {{ i.get('message') }}</p>
+    {% endfor %}
+  </section>
+
+  <section class="card">
+    <h2>0 · Refinement</h2>
+    <p>{{ refinement.get('refined_ticket', '') }}</p>
+    {% if refinement.get('assumptions') %}
+    <h3>Assumptions</h3>
+    <ul>{% for a in refinement.get('assumptions', []) %}<li>{{ a }}</li>{% endfor %}</ul>
+    {% endif %}
+    {% if refinement.get('questions') %}
+    <h3>Clarifying questions</h3>
+    <ul>{% for q in refinement.get('questions', []) %}<li>{{ q.get('question') }} <em>({{ q.get('context') }})</em></li>{% endfor %}</ul>
+    {% endif %}
+  </section>
+
+  <section class="card">
+    <h2>1 · Contracts &amp; DoD</h2>
+    <table><tr><th>ID</th><th>Kind</th><th>Name</th><th>Schema</th><th>Requirements</th><th>Status</th></tr>
+    {% for c in dod.get('contracts', []) or [] %}
+    <tr><td>{{ c.get('id') }}</td><td>{{ c.get('kind') }}</td><td>{{ c.get('name') }}</td><td>{{ c.get('schema_ref') }}</td><td>{{ c.get('requirement_ids', []) | join(', ') }}</td><td>{{ c.get('status_codes', []) | join(', ') }}</td></tr>
+    {% endfor %}</table>
+    <h3>Definition of Done</h3>
+    <ul>{% for d in dod.get('dod', []) or [] %}<li>[{% if d.get('verifiable') %}✓{% else %}○{% endif %}] <code>{{ d.get('id') }}</code> {{ d.get('criterion') }}{% if d.get('requirement_ids') %} <em>({{ d.get('requirement_ids') | join(', ') }})</em>{% endif %}</li>{% endfor %}</ul>
+    <h3>Milestones</h3>
+    <ol>{% for m in dod.get('milestones', []) or [] %}<li><code>{{ m.get('id') }}</code> <strong>{{ m.get('title') }}</strong> — {{ m.get('acceptance') }}</li>{% endfor %}</ol>
+  </section>
+
+  <section class="card">
+    <h2>2 · PRD / TRD / Security</h2>
+    <p><strong>Goal:</strong> {{ prd.get('goal', '') }}</p>
+    {% if prd.get('requirements') %}
+    <h3>Requirements</h3>
+    <ul>{% for r in prd.get('requirements', []) %}<li>{% if r is mapping %}<code>{{ r.get('id') }}</code> {{ r.get('text') }}{% else %}{{ r }}{% endif %}</li>{% endfor %}</ul>
+    {% endif %}
+    {% if prd.get('acceptance_criteria') %}
+    <h3>Acceptance criteria</h3>
+    <ul>{% for a in prd.get('acceptance_criteria', []) %}<li>{% if a is mapping %}<code>{{ a.get('id') }}</code> {{ a.get('text') }}{% if a.get('requirement_ids') %} <em>({{ a.get('requirement_ids') | join(', ') }})</em>{% endif %}{% else %}{{ a }}{% endif %}</li>{% endfor %}</ul>
+    {% endif %}
+    <h3>Components</h3>
+    <p>{{ trd.get('components', []) | join(', ') }}</p>
+    <h3>Flow</h3>
+    <pre>{{ trd.get('mermaid_flow', '') }}</pre>
+    <h3>OWASP</h3>
+    <table><tr><th>ID</th><th>Check</th><th>Status</th><th>Notes</th></tr>
+    {% for c in security.get('owasp_checks', []) or [] %}
+    <tr><td>{{ c.get('id') }}</td><td>{{ c.get('check') }}</td><td>{{ c.get('status') }}</td><td>{{ c.get('notes') }}</td></tr>
+    {% endfor %}</table>
+  </section>
+
+  <section class="card">
+    <h2>3 · TDD Roadmap (target ≥{{ tdd.get('coverage_target', 80) }}%)</h2>
+    <table><tr><th>ID</th><th>Test</th><th>Kind</th><th>Requirements</th><th>Contracts</th><th>Priority</th></tr>
+    {% for t in tdd.get('test_cases', []) or [] %}
+    <tr><td>{{ t.get('id') }}</td><td>{{ t.get('name') }}</td><td>{{ t.get('kind') }}</td><td>{{ t.get('requirement_ids', []) | join(', ') }}</td><td>{{ t.get('contract_ids', []) | join(', ') }}</td><td>{{ t.get('priority') }}</td></tr>
+    {% endfor %}</table>
+    <ol>{% for s in tdd.get('implementation_steps', []) or [] %}<li><code>{{ s.get('id') }}</code> <strong>{{ s.get('title') }}</strong> — {{ s.get('detail') }}{% if s.get('test_ids') %} <em>(tests: {{ s.get('test_ids') | join(', ') }})</em>{% endif %}</li>{% endfor %}</ol>
+    <p><em>{{ tdd.get('red_green_notes', '') }}</em></p>
+  </section>
+</main>
+<footer>Generated by Dev-Journey-Agent · Evidence-driven feature planning</footer>
+</body>
+</html>
