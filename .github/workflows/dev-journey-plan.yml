@@ -1,0 +1,71 @@
+name: Dev Journey plan
+
+on:
+  workflow_dispatch:
+    inputs:
+      ticket:
+        description: Vague ticket or feature request
+        required: true
+        type: string
+      repo:
+        description: GitHub repository to inspect (owner/name)
+        required: true
+        default: mario7gs/dev-journey-agent
+        type: string
+      branch:
+        description: Repository branch to inspect
+        required: true
+        default: main
+        type: string
+      mode:
+        description: Blocking stops on unresolved questions; draft continues provisionally
+        required: true
+        default: blocking
+        type: choice
+        options:
+          - blocking
+          - draft
+
+permissions:
+  contents: read
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      USE_MOCK_LLM: "true"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - name: Set up Python
+        run: uv python install 3.11
+      - name: Install dependencies
+        run: uv sync --locked --extra dev
+      - name: Run Dev Journey Agent
+        id: plan
+        shell: bash
+        run: |
+          set +e
+          uv run dev-journey \
+            --ticket "${{ inputs.ticket }}" \
+            --repo "${{ inputs.repo }}" \
+            --branch "${{ inputs.branch }}" \
+            --mode "${{ inputs.mode }}" \
+            --out-dir artifacts/plan
+          status=$?
+          set -e
+          printf 'exit_code=%s\nmode=%s\n' "$status" "${{ inputs.mode }}" > artifacts/plan/run-status.txt
+          # Exit code 2 is the deliberate NEEDS_INPUT/provisional result.
+          if [[ "$status" -ne 0 && "$status" -ne 2 ]]; then
+            exit "$status"
+          fi
+      - name: Upload planning artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dev-journey-plan
+          path: artifacts/plan/
+          if-no-files-found: error
