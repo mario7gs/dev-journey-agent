@@ -25,6 +25,7 @@ from core.checkpoints import (
 )
 from core.llm_interface import register_mock
 from core.memory_manager import append_checkpoint
+from core.review_signals import write_run_status
 from core.state import AgentState, ExecutionMode, initial_state
 from core.telemetry import TelemetryRecorder
 from core.traceability import apply_traceability
@@ -173,7 +174,13 @@ def _refinement_block_reasons(refinement: dict, code_context: dict) -> list[str]
     return reasons
 
 
-def _partial_export(state: AgentState, settings: Settings, out_dir: str, summary: str) -> int:
+def _partial_export(
+    state: AgentState,
+    settings: Settings,
+    out_dir: str,
+    summary: str,
+    status_file: str | None = None,
+) -> int:
     from tools.html_exporter import write_docs
 
     state["status"] = "needs_input"
@@ -181,6 +188,8 @@ def _partial_export(state: AgentState, settings: Settings, out_dir: str, summary
     append_checkpoint("Pipeline-gate", "needs-input", summary, settings.memory_path)
     print(f"Pipeline stopped: {summary}")
     print(f"Draft clarification report: {paths['md']} + {paths['html']}")
+    if status_file:
+        write_run_status(status_file, state, 2, paths)
     return 2
 
 
@@ -213,6 +222,10 @@ def _parse_args(argv: list[str] | None) -> argparse.Namespace:
         "--out-dir", help="Export directory for Markdown, HTML, PDF, and case-study files (default: docs)"
     )
     parser.add_argument(
+        "--status-file",
+        help="Write a machine-readable review signal JSON file at this path",
+    )
+    parser.add_argument(
         "--mode",
         choices=("blocking", "draft"),
         help="blocking stops on unresolved Step 0 questions; draft continues but cannot be approved",
@@ -230,6 +243,8 @@ def _parse_args(argv: list[str] | None) -> argparse.Namespace:
         parser.error("--demo is recorded in the run configuration; omit it when resuming")
     if args.resume and args.out_dir:
         parser.error("--out-dir is recorded in the run configuration; omit it when resuming")
+    if args.resume and args.status_file:
+        parser.error("--status-file is recorded in the run configuration; omit it when resuming")
     return args
 
 
@@ -261,6 +276,7 @@ def main(argv: list[str] | None = None) -> int:
             raise SystemExit("USE_MOCK_LLM must match the checkpointed run configuration")
         completed_stage = checkpoint.stage
         out_dir = str(run_config["out_dir"])
+        status_file = run_config.get("status_file")
         demo = bool(run_config.get("demo", False))
         print(f"Resuming run {state['run_id']} after {completed_stage}.")
     else:
@@ -272,10 +288,12 @@ def main(argv: list[str] | None = None) -> int:
         run_config = {
             "demo": args.demo,
             "out_dir": args.out_dir or "docs",
+            "status_file": args.status_file,
             "use_mock_llm": settings.use_mock_llm,
         }
         completed_stage = ""
         out_dir = str(run_config["out_dir"])
+        status_file = args.status_file
         demo = args.demo
 
     if settings.use_mock_llm:
@@ -326,7 +344,7 @@ def main(argv: list[str] | None = None) -> int:
     if state["code_context"].get("status") == "error" and mode == "blocking":
         reason = str(state["code_context"].get("error", ""))
         telemetry.record_event("pipeline_gate", status="needs_input", block_reasons=[reason])
-        return _partial_export(state, settings, out_dir, reason)
+        return _partial_export(state, settings, out_dir, reason, status_file)
     if state["code_context"].get("status") == "error":
         print("Warning: continuing in draft mode without repository context.")
 
@@ -352,7 +370,7 @@ def main(argv: list[str] | None = None) -> int:
     block_reasons = list(state.get("block_reasons", []))
     if block_reasons and mode == "blocking":
         telemetry.record_event("pipeline_gate", status="needs_input", block_reasons=block_reasons)
-        return _partial_export(state, settings, out_dir, " | ".join(block_reasons))
+        return _partial_export(state, settings, out_dir, " | ".join(block_reasons), status_file)
     if block_reasons and completed_index == stage_index("refinement"):
         print("Draft mode: continuing with unresolved input:")
         for reason in block_reasons:
@@ -414,7 +432,7 @@ def main(argv: list[str] | None = None) -> int:
         telemetry.record_event(
             "pipeline_gate", status="needs_input", block_reasons=list(state.get("block_reasons", []))
         )
-        return _partial_export(state, settings, out_dir, "Critic gate requires attention")
+        return _partial_export(state, settings, out_dir, "Critic gate requires attention", status_file)
 
     if completed_index < stage_index("tdd"):
         with telemetry.stage("tdd"):
@@ -483,7 +501,10 @@ def main(argv: list[str] | None = None) -> int:
                 print(f"Warning: {paths[key]}")
     else:
         print(f"Run {state['run_id']} is already complete ({state['status']}).")
-    return _exit_code(state)
+    exit_code = _exit_code(state)
+    if status_file:
+        write_run_status(status_file, state, exit_code, locals().get("paths", {}))
+    return exit_code
 
 
 if __name__ == "__main__":

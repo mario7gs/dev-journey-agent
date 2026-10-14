@@ -3,6 +3,14 @@
 
 <!-- checkpoints below -->
 
+## [2026-10-14T16:30:00+02:00] Phase 3 — review and team signals
+Implemented machine-readable `run-status.json` payloads and a separate
+GitHub review-signals job. The workflow publishes the `dev-journey/plan`
+commit status for approved, draft, and needs-input outcomes and supports
+explicitly opt-in issue or pull-request comments. The planning job remains
+`contents: read`; review signals use only status and issue-comment permissions.
+No source-code edits, merges, or deployments are performed by the action.
+
 ## [2026-10-14T16:00:00+02:00] GitHub-agent handoff — resumed
 The private repository `mario7gs/dev-journey-agent` is connected and uses the
 `main` default branch. Baseline commit `c5cea69`, CI workflow commit

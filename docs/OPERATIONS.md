@@ -39,6 +39,15 @@ The CI workflow runs the same checks locally with:
 bash scripts/verify.sh
 ```
 
+## GitHub review signals
+
+The manual `Dev Journey plan` workflow writes `artifacts/plan/run-status.json`
+and publishes the `dev-journey/plan` commit status. Approved plans are marked
+successful, draft plans are pending human review, and needs-input plans are
+marked failed until their clarification questions are resolved. Issue and pull
+request comments are opt-in inputs and require the workflow's issue-write
+permission. The workflow performs no source-code edits, merges, or deployments.
+
 The deterministic portfolio fixture is generated with:
 
 ```bash

@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 import pytest
@@ -28,11 +29,25 @@ def test_blocking_mode_exports_needs_input(tmp_path, monkeypatch):
     monkeypatch.setenv("MEMORY_PATH", str(tmp_path / "MEMORY.md"))
     monkeypatch.setenv("CHECKPOINT_DIR", str(tmp_path / "checkpoints"))
     out_dir = tmp_path / "out"
-    exit_code = main(["--ticket", "Demo", "--demo", "--out-dir", str(out_dir)])
+    status_file = tmp_path / "run-status.json"
+    exit_code = main(
+        [
+            "--ticket",
+            "Demo",
+            "--demo",
+            "--out-dir",
+            str(out_dir),
+            "--status-file",
+            str(status_file),
+        ]
+    )
     assert exit_code == 2
     markdown = Path(out_dir / "FEATURE_SPEC.md").read_text(encoding="utf-8")
     assert "`needs_input`" in markdown
     assert "Clarification required" in markdown
+    payload = json.loads(status_file.read_text(encoding="utf-8"))
+    assert payload["status"] == "needs_input"
+    assert payload["github_status"] == "failure"
 
 
 def test_draft_mode_continues_but_is_not_approved(tmp_path, monkeypatch):

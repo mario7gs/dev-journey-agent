@@ -89,7 +89,7 @@
       <div class="phase" data-number="0"><h3>Baseline and repository setup <span class="status done">DONE LOCALLY</span></h3><p>The local MVP has tests, CI definitions, exports, checkpoints, telemetry, a user journey guide, and operations documentation.</p><ul><li>Create or connect the private GitHub repository.</li><li>Tag the first local baseline release.</li><li>Keep secrets outside source, artifacts, and telemetry.</li></ul></div>
       <div class="phase" data-number="1"><h3>Package the CLI <span class="status done">DONE</span></h3><p>Make the agent installable and callable as a stable command rather than relying on checkout-specific path setup.</p><ul><li>Add a <code>dev-journey</code> console entry point.</li><li>Preserve <code>uv</code> lockfile and mock mode.</li><li>Document versioning and upgrade behavior.</li></ul></div>
       <div class="phase" data-number="2"><h3>Manual GitHub Action <span class="status done">DONE</span></h3><p>Run the agent from a target repository without requiring a hosted backend.</p><ul><li>Support <code>workflow_dispatch</code> inputs: ticket, repo, branch, and mode.</li><li>Use least-privilege <code>contents: read</code> permissions.</li><li>Upload generated planning artifacts.</li></ul></div>
-      <div class="phase" data-number="3"><h3>Review and team signals <span class="status next">PLANNED</span></h3><p>Make results easy for a team to review without letting the agent silently change production code.</p><ul><li>Publish an approved/draft/needs-input status check.</li><li>Add optional issue or PR comments.</li><li>Keep code changes out of scope until explicit approval exists.</li></ul></div>
+      <div class="phase" data-number="3"><h3>Review and team signals <span class="status done">DONE</span></h3><p>Make results easy for a team to review without letting the agent silently change production code.</p><ul><li>Publish the <code>dev-journey/plan</code> status check for approved, draft, and needs-input outcomes.</li><li>Support opt-in issue or PR comments with bounded review context.</li><li>Keep code changes, merges, and deployments out of scope.</li></ul></div>
       <div class="phase" data-number="4"><h3>Security and persistence <span class="status next">PLANNED</span></h3><p>Move from a local run to a controlled CI execution model.</p><ul><li>Redact secrets and untrusted prompt content.</li><li>Persist checkpoints as controlled workflow artifacts.</li><li>Define telemetry retention and provider cost limits.</li></ul></div>
       <div class="phase" data-number="5"><h3>Release and adoption <span class="status done">DONE</span></h3><p>Validate the action against a fixture repository and publish a versioned release.</p><ul><li>Integration matrix covers normal, blocked, draft, and resumed runs.</li><li>Release evidence and ownership boundaries are documented.</li><li>The action is adopted in this private repository.</li></ul></div>
     </section>
@@ -125,7 +125,7 @@ jobs:
         with:
           name: dev-journey-plan
           path: docs/</code></pre>
-      <p class="muted">The contract is active as <code>.github/workflows/dev-journey-plan.yml</code>. The workflow preserves expected blocking/provisional exit code 2 while uploading the generated evidence bundle.</p>
+      <p class="muted">The contract is active as <code>.github/workflows/dev-journey-plan.yml</code>. The workflow preserves expected blocking/provisional exit code 2, uploads the generated evidence bundle, publishes <code>dev-journey/plan</code>, and can optionally comment on an issue or pull request.</p>
     </section>
 
     <section class="card" aria-labelledby="security-title">
@@ -167,6 +167,7 @@ jobs:
         <tr><td>2026-10-14</td><td>Private repository connected</td><td><span class="status done">DONE</span></td><td><code>mario7gs/dev-journey-agent</code> verified private with push access and default branch <code>main</code>.</td></tr>
         <tr><td>2026-10-14</td><td>Baseline, CLI package, and manual action</td><td><span class="status done">DONE</span></td><td>Baseline and CI are on <code>main</code>; the console command and manual workflow are published; 55 tests, lint, type checks, and HTML parsing pass.</td></tr>
         <tr><td>2026-10-14</td><td>Release matrix and v0.1.0</td><td><span class="status done">DONE</span></td><td>Blocked, draft, normal, and resumed scenarios passed; the first private-repository release tag is published.</td></tr>
+        <tr><td>2026-10-14</td><td>Review and team signals</td><td><span class="status done">DONE</span></td><td>Machine-readable status payloads, commit status publication, and opt-in issue/PR comments are implemented without source-code mutation.</td></tr>
       </tbody></table>
     </section>
 

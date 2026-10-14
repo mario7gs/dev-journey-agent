@@ -50,6 +50,11 @@ command. For a clean environment, install the locked project and invoke
 `dev-journey --help`; the repository also includes a manual GitHub Action under
 **Actions → Dev Journey plan**.
 
+The action publishes a `dev-journey/plan` commit status: approved runs are
+successful, draft runs remain pending, and needs-input runs are failures until
+clarified. Issue or pull-request comments are opt-in workflow inputs; the
+action never edits source code, merges, or deploys.
+
 No API keys are required for deterministic mock mode (`USE_MOCK_LLM=true` default).
 The default blocking mode exits with `NEEDS_INPUT` when refinement finds unresolved questions.
 
