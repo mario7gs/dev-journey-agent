@@ -18,6 +18,8 @@ jobs:
         run: uv sync --locked --extra dev
       - name: Run tests
         run: uv run pytest -q
+      - name: Secret audit
+        run: uv run python scripts/security_audit.py .
       - name: Lint
         run: uv run ruff check .
       - name: Type check
