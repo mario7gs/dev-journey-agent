@@ -19,9 +19,14 @@ from time import perf_counter
 from types import TracebackType
 from typing import Any, Literal, Self
 
+from config.redaction import redact_value
 from config.settings import Settings
 
 _ACTIVE_STAGE: ContextVar[_StageContext | None] = ContextVar("dj_active_stage", default=None)
+
+
+class TelemetryBudgetExceeded(RuntimeError):
+    """The configured per-run token or cost budget has been exceeded."""
 
 
 def _now() -> str:
@@ -162,6 +167,12 @@ class TelemetryRecorder:
         self.endpoint = settings.phoenix_endpoint
         self.project_name = settings.phoenix_project_name
         self.telemetry_path = Path(settings.telemetry_path)
+        self.telemetry_max_bytes = settings.telemetry_max_bytes
+        self.max_run_cost_usd = settings.max_run_cost_usd
+        self.max_run_tokens = settings.max_run_tokens
+        self.total_cost_usd = 0.0
+        self.total_tokens = 0
+        self.retention_limit_reached = False
         self.state_provider = state_provider
         self._file_lock = threading.Lock()
         self._tracer: Any = None
@@ -218,12 +229,27 @@ class TelemetryRecorder:
         current = _ACTIVE_STAGE.get()
         if current is None or current.recorder is not self:
             return
+        usage = _usage_dict(response) if response is not None else None
         current.add_llm_attempt(
             model,
             status,
-            usage=_usage_dict(response) if response is not None else None,
+            usage=usage,
             error_type=type(error).__name__ if error is not None else "",
         )
+        if usage:
+            self.total_tokens += int(usage.get("total_tokens", 0))
+            self.total_cost_usd += float(usage.get("cost_usd", 0.0))
+
+    def raise_if_budget_exceeded(self) -> None:
+        """Stop before the next model call when a configured budget is exhausted."""
+        if self.max_run_tokens and self.total_tokens > self.max_run_tokens:
+            raise TelemetryBudgetExceeded(
+                f"Run token budget exceeded ({self.total_tokens}>{self.max_run_tokens})"
+            )
+        if self.max_run_cost_usd and self.total_cost_usd > self.max_run_cost_usd:
+            raise TelemetryBudgetExceeded(
+                f"Run cost budget exceeded (${self.total_cost_usd:.4f}>${self.max_run_cost_usd:.4f})"
+            )
 
     def _start_span(self, stage: str) -> Any:
         if self._tracer is None:
@@ -247,7 +273,8 @@ class TelemetryRecorder:
         if span is None:
             return
         try:
-            for key, value in {**attributes, "duration_ms": duration_ms}.items():
+            safe_attributes = redact_value({**attributes, "duration_ms": duration_ms})
+            for key, value in safe_attributes.items():
                 if isinstance(value, (str, int, float, bool)):
                     span.set_attribute(key, value)
             if status == "error":
@@ -275,6 +302,12 @@ class TelemetryRecorder:
                 "fallback_attempts": max(0, len(context._attempts) - 1),
                 "llm_attempts": context._attempts,
                 "usage": usage,
+                "budget": {
+                    "total_tokens": self.total_tokens,
+                    "total_cost_usd": self.total_cost_usd,
+                    "max_run_tokens": self.max_run_tokens,
+                    "max_run_cost_usd": self.max_run_cost_usd,
+                },
             }
         )
         if self.phoenix_error:
@@ -308,7 +341,12 @@ class TelemetryRecorder:
     def _write(self, payload: dict[str, Any]) -> None:
         try:
             self.telemetry_path.parent.mkdir(parents=True, exist_ok=True)
-            line = json.dumps(payload, ensure_ascii=False, sort_keys=True, default=str) + "\n"
+            safe_payload = redact_value(payload)
+            line = json.dumps(safe_payload, ensure_ascii=False, sort_keys=True, default=str) + "\n"
+            current_bytes = self.telemetry_path.stat().st_size if self.telemetry_path.exists() else 0
+            if current_bytes + len(line.encode("utf-8")) > self.telemetry_max_bytes:
+                self.retention_limit_reached = True
+                return
             with self._file_lock, self.telemetry_path.open("a", encoding="utf-8") as handle:
                 handle.write(line)
         except OSError:

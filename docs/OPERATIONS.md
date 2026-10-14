@@ -12,6 +12,13 @@ Repository context is read-only. Checkpoints, memory, and optional telemetry
 are written locally under the configured paths; add those paths to deployment
 storage policy before sharing an artifact bundle.
 
+Persisted checkpoint state, audit summaries, telemetry JSONL, and Phoenix span
+attributes pass through credential redaction before they are written or sent.
+Set `MAX_RUN_COST_USD` and `MAX_RUN_TOKENS` to enforce per-run provider limits;
+zero disables the corresponding limit. `TELEMETRY_MAX_BYTES` bounds local JSONL
+growth, while the GitHub workflow stores redacted checkpoints, memory, and
+telemetry under the planning artifact with a 14-day retention policy.
+
 ## Failure recovery
 
 The pipeline writes an atomic checkpoint after each completed stage. If a run is

@@ -20,6 +20,13 @@ available Git push token lacks the `workflow` scope. The release matrix passed
 with expected exit codes 2 (blocked), 2 (draft), 0 (normal), and 0 (resumed).
 Release tag `v0.1.0` is published; the GitHub-native queue is complete.
 
+## [2026-10-14T17:00:00+02:00] Phase 4 — security and persistence foundations
+Added recursive credential redaction for checkpoints, memory, telemetry, and
+Phoenix attributes. Added configurable per-run token/cost budgets and a local
+telemetry byte cap. The GitHub workflow now persists redacted checkpoints,
+memory, and telemetry as a 14-day artifact. Retention governance and deeper
+secret-detection coverage remain follow-up work.
+
 ## [2026-10-12T22:50:00+02:00] GitHub-agent handoff — scheduled
 The GitHub plugin is authenticated for repository read access, but no
 repository-creation operation is exposed. The target private repository does

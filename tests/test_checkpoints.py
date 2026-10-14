@@ -68,3 +68,23 @@ def test_checkpoint_loader_rejects_traceability_tampering(tmp_path):
 
     with pytest.raises(CheckpointIntegrityError, match="traceability"):
         load_resume_point(tmp_path, "run-123")
+
+
+def test_checkpoint_persistence_redacts_secrets(tmp_path):
+    state = _context_state()
+    state["code_context"] = {
+        "status": "ready",
+        "chunks": [{"content": "Authorization: Bearer ghp_1234567890"}],
+    }
+    envelope = build_checkpoint(
+        state,
+        "repository_context",
+        state["code_context"],
+        {"api_key": "sk-proj-1234567890", "out_dir": "docs"},
+    )
+    path = write_checkpoint(envelope, tmp_path)
+    persisted = path.read_text(encoding="utf-8")
+
+    assert "ghp_1234567890" not in persisted
+    assert "sk-proj-1234567890" not in persisted
+    assert "[REDACTED]" in persisted

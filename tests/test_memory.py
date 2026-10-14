@@ -14,3 +14,12 @@ def test_memory_roundtrip(tmp_path):
 
 def test_read_missing_returns_empty(tmp_path):
     assert read_memory(tmp_path / "nope.md") == ""
+
+
+def test_memory_audit_redacts_credentials(tmp_path):
+    mem = tmp_path / "MEMORY.md"
+    append_checkpoint("security", "done", "token=ghp_1234567890", memory_path=mem)
+
+    content = read_memory(mem)
+    assert "ghp_1234567890" not in content
+    assert "token=[REDACTED]" in content

@@ -18,6 +18,10 @@ class Settings:
     phoenix_enabled: bool = False
     phoenix_project_name: str = "dev-journey-agent"
     telemetry_path: str = ".dev-journey/telemetry/events.jsonl"
+    telemetry_retention_days: int = 14
+    telemetry_max_bytes: int = 5_000_000
+    max_run_cost_usd: float = 0.0
+    max_run_tokens: int = 0
     primary_model: str = "gpt-4o"
     fallback_model: str = "gpt-4o-mini"
     local_model: str = "ollama/llama3"
@@ -47,6 +51,10 @@ def load_settings(env: dict[str, str] | None = None) -> Settings:
         in ("1", "true", "yes", "on"),
         phoenix_project_name=get("PHOENIX_PROJECT_NAME", "dev-journey-agent"),
         telemetry_path=get("TELEMETRY_PATH", ".dev-journey/telemetry/events.jsonl"),
+        telemetry_retention_days=max(1, int(get("TELEMETRY_RETENTION_DAYS", "14"))),
+        telemetry_max_bytes=max(1, int(get("TELEMETRY_MAX_BYTES", "5000000"))),
+        max_run_cost_usd=max(0.0, float(get("MAX_RUN_COST_USD", "0"))),
+        max_run_tokens=max(0, int(get("MAX_RUN_TOKENS", "0"))),
         primary_model=get("PRIMARY_MODEL", "gpt-4o"),
         fallback_model=get("FALLBACK_MODEL", "gpt-4o-mini"),
         local_model=get("LOCAL_MODEL", "ollama/llama3"),

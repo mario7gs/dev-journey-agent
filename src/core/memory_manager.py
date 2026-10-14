@@ -4,6 +4,8 @@ from __future__ import annotations
 from datetime import UTC, datetime
 from pathlib import Path
 
+from config.redaction import redact_text
+
 
 def read_memory(memory_path: str | Path = "MEMORY.md") -> str:
     path = Path(memory_path)
@@ -20,7 +22,7 @@ def append_checkpoint(
 ) -> str:
     """Append one checkpoint block; return the block text (immutable, no rewrite)."""
     ts = datetime.now(UTC).isoformat(timespec="seconds")
-    block = f"\n## [{ts}] {step} — {status}\n{summary.strip()}\n"
+    block = f"\n## [{ts}] {step} — {status}\n{redact_text(summary.strip())}\n"
     path = Path(memory_path)
     if not path.exists():
         path.write_text("# MEMORY.md — checkpoint log\n", encoding="utf-8")

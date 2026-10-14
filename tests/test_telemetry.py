@@ -1,6 +1,8 @@
 import json
 from types import SimpleNamespace
 
+import pytest
+
 from config.settings import Settings, load_settings
 from core.llm_interface import generate_structured, register_mock
 from core.telemetry import TelemetryRecorder
@@ -14,12 +16,20 @@ def test_settings_include_optional_telemetry_configuration():
             "PHOENIX_ENDPOINT": "http://phoenix:6006",
             "PHOENIX_PROJECT_NAME": "journey-tests",
             "TELEMETRY_PATH": "/tmp/journey-events.jsonl",
+            "TELEMETRY_RETENTION_DAYS": "7",
+            "TELEMETRY_MAX_BYTES": "1234",
+            "MAX_RUN_COST_USD": "0.25",
+            "MAX_RUN_TOKENS": "1000",
         }
     )
     assert settings.phoenix_enabled is True
     assert settings.phoenix_endpoint == "http://phoenix:6006"
     assert settings.phoenix_project_name == "journey-tests"
     assert settings.telemetry_path == "/tmp/journey-events.jsonl"
+    assert settings.telemetry_retention_days == 7
+    assert settings.telemetry_max_bytes == 1234
+    assert settings.max_run_cost_usd == 0.25
+    assert settings.max_run_tokens == 1000
 
 
 def test_disabled_telemetry_is_a_noop(tmp_path):
@@ -108,3 +118,47 @@ def test_enabled_telemetry_records_fallback_and_token_cost(tmp_path, monkeypatch
         "total_tokens": 18,
         "cost_usd": 0.0012,
     }
+
+
+def test_telemetry_redacts_secrets_and_honors_size_cap(tmp_path):
+    settings = Settings(
+        phoenix_enabled=True,
+        telemetry_path=str(tmp_path / "events.jsonl"),
+        telemetry_max_bytes=500,
+    )
+    recorder = TelemetryRecorder(settings, "run-secret", "blocking")
+    recorder.record_event("security", secret="sk-proj-1234567890", detail="x" * 2_000)
+
+    assert recorder.retention_limit_reached is True
+    assert not (tmp_path / "events.jsonl").exists()
+
+
+def test_llm_budget_stops_before_next_generation(tmp_path, monkeypatch):
+    settings = Settings(
+        phoenix_enabled=True,
+        telemetry_path=str(tmp_path / "events.jsonl"),
+        use_mock_llm=False,
+        primary_model="primary",
+        fallback_model="",
+        local_model="",
+        max_run_tokens=10,
+    )
+    recorder = TelemetryRecorder(settings, "run-budget", "blocking")
+
+    def fake_call(model, prompt, schema, settings):
+        return SimpleNamespace(
+            choices=[
+                SimpleNamespace(
+                    message=SimpleNamespace(
+                        content='{"refined_ticket":"done","gaps":[],"questions":[],"assumptions":[]}'
+                    )
+                )
+            ],
+            usage=SimpleNamespace(prompt_tokens=11, completion_tokens=7, total_tokens=18),
+        )
+
+    monkeypatch.setattr("core.llm_interface._call_model", fake_call)
+    from core.telemetry import TelemetryBudgetExceeded
+
+    with recorder.stage("refinement"), pytest.raises(TelemetryBudgetExceeded, match="token budget"):
+        generate_structured("refine", RefinementOutput, use_mock=False, settings=settings)

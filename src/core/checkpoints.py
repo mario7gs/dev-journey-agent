@@ -16,6 +16,7 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
+from config.redaction import redact_value
 from core.state import AgentState
 from schemas.critic import CriticVerdict
 from schemas.step0_refinement import RefinementOutput
@@ -146,6 +147,9 @@ def build_checkpoint(
     _validate_state(source, stage)
     if not isinstance(stage_output, dict):
         raise CheckpointIntegrityError("Checkpoint stage_output must be an object")
+    persisted_state = redact_value(source)
+    persisted_output = redact_value(stage_output)
+    persisted_config = redact_value(dict(run_config))
     return CheckpointEnvelope(
         schema_version=1,
         run_id=str(source["run_id"]),
@@ -153,10 +157,10 @@ def build_checkpoint(
         stage_index=index,
         mode=source["mode"],
         created_at=datetime.now(UTC),
-        run_config=dict(run_config),
-        state=source,
-        stage_output=stage_output,
-        traceability=traceability_snapshot(source),
+        run_config=persisted_config,
+        state=persisted_state,
+        stage_output=persisted_output,
+        traceability=traceability_snapshot(persisted_state),
     )
 
 

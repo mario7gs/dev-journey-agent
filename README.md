@@ -16,6 +16,7 @@ TDD roadmap → stakeholder export.
 - ✅ Shared visual identity and brand tokens for HTML, PDF, and portfolio presentation surfaces
 - ✅ Portfolio exports: print-safe `FEATURE_SPEC.pdf`, `FEATURE_CASE_STUDY.html`, and presentation PDF
 - ✅ Release polish: CI quality gates, reproducible demo script, and operations/cost documentation
+- ✅ Phase 4 foundations: persisted-data redaction, bounded telemetry, run token/cost budgets, and controlled workflow artifacts
 - Outputs: `FEATURE_SPEC.md` (developers) + `FEATURE_SPEC.html` / `FEATURE_SPEC.pdf` (stakeholders) + `FEATURE_CASE_STUDY.html` / `FEATURE_CASE_STUDY.pdf` (portfolio)
 
 The visual system is documented in [`docs/BRAND_GUIDELINES.md`](docs/BRAND_GUIDELINES.md)

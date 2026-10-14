@@ -35,7 +35,13 @@ def generate_structured(
         if recorder is not None:
             recorder.record_llm_attempt("mock", "ok")
         return output
-    return _real_generate(prompt, schema, settings or load_settings())
+    recorder = active_recorder()
+    if recorder is not None:
+        recorder.raise_if_budget_exceeded()
+    output = _real_generate(prompt, schema, settings or load_settings())
+    if recorder is not None:
+        recorder.raise_if_budget_exceeded()
+    return output
 
 
 def _mock_payload(prompt: str, schema: type[T]) -> dict[str, Any]:
@@ -113,6 +119,9 @@ def _real_generate(prompt: str, schema: type[T], settings: Settings) -> T:
     models = [settings.primary_model, settings.fallback_model, settings.local_model]
     failures: list[str] = []
     for model in dict.fromkeys(m for m in models if m):
+        recorder = active_recorder()
+        if recorder is not None:
+            recorder.raise_if_budget_exceeded()
         response = None
         try:
             response = _call_model(model, enriched_prompt, schema, settings)
