@@ -52,6 +52,7 @@ jobs:
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       USE_MOCK_LLM: "true"
+      PHOENIX_ENABLED: "true"
       MEMORY_PATH: artifacts/plan/MEMORY.md
       CHECKPOINT_DIR: artifacts/plan/checkpoints
       TELEMETRY_PATH: artifacts/plan/telemetry/events.jsonl
@@ -87,6 +88,28 @@ jobs:
           if [[ "$status" -ne 0 && "$status" -ne 2 ]]; then
             exit "$status"
           fi
+      - name: Summarize provider usage and budget
+        if: always()
+        shell: bash
+        run: |
+          set +e
+          uv run python scripts/cost_report.py \
+            --input artifacts/plan/telemetry/events.jsonl \
+            --output artifacts/plan/cost-summary.json \
+            --max-run-cost-usd 1.00 \
+            --max-run-tokens 50000 \
+            --max-bytes 500000 \
+            --retention-days 14
+          status=$?
+          if [[ -n "${GITHUB_STEP_SUMMARY:-}" && -f artifacts/plan/cost-summary.json ]]; then
+            {
+              echo '## Dev Journey provider usage'
+              echo '```json'
+              cat artifacts/plan/cost-summary.json
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+          exit "$status"
       - name: Upload planning artifacts
         if: always()
         uses: actions/upload-artifact@v4
