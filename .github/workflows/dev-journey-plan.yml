@@ -52,6 +52,13 @@ jobs:
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       USE_MOCK_LLM: "true"
+      MEMORY_PATH: artifacts/plan/MEMORY.md
+      CHECKPOINT_DIR: artifacts/plan/checkpoints
+      TELEMETRY_PATH: artifacts/plan/telemetry/events.jsonl
+      TELEMETRY_RETENTION_DAYS: "14"
+      TELEMETRY_MAX_BYTES: "500000"
+      MAX_RUN_COST_USD: "1.00"
+      MAX_RUN_TOKENS: "50000"
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
@@ -87,6 +94,7 @@ jobs:
           name: dev-journey-plan
           path: artifacts/plan/
           if-no-files-found: error
+          retention-days: 14
 
   review-signals:
     if: always()
@@ -160,15 +168,17 @@ jobs:
                 return;
               }
               const reasons = (payload.block_reasons || []).slice(0, 5);
-              const reasonText = reasons.length ? `\\n\\nBlocking reasons:\\n${reasons.map((reason) => `- ${reason}`).join('\\n')}` : '';
+              const reasonText = reasons.length
+                ? "\n\nBlocking reasons:\n" + reasons.map((reason) => "- " + reason).join("\n")
+                : "";
               const body = [
                 '<!-- dev-journey-agent -->',
                 `## Dev Journey plan: **${payload.status || 'unknown'}**`,
                 description,
-                `\\n[View workflow run](${runUrl}) and download the review artifacts.`,
+                "View workflow run: " + runUrl + " and download the review artifacts.",
                 reasonText,
-                '\\nNo source-code changes, merges, or deployments were performed.',
-              ].join('\\n');
+                'No source-code changes, merges, or deployments were performed.',
+              ].join("\n");
               await github.rest.issues.createComment({
                 owner,
                 repo,
