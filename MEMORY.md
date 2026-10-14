@@ -24,8 +24,10 @@ Release tag `v0.1.0` is published; the GitHub-native queue is complete.
 Added recursive credential redaction for checkpoints, memory, telemetry, and
 Phoenix attributes. Added configurable per-run token/cost budgets and a local
 telemetry byte cap. The GitHub workflow now persists redacted checkpoints,
-memory, and telemetry as a 14-day artifact. Retention governance and deeper
-secret-detection coverage remain follow-up work.
+memory, telemetry, and cost summaries as a 14-day artifact. CI now runs a
+recognizable-secret audit, provider usage reports expose budget status, and
+local checkpoint pruning is explicit and dry-run by default. Phase 4 is
+complete.
 
 ## [2026-10-12T22:50:00+02:00] GitHub-agent handoff — scheduled
 The GitHub plugin is authenticated for repository read access, but no

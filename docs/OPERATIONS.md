@@ -17,7 +17,9 @@ attributes pass through credential redaction before they are written or sent.
 Set `MAX_RUN_COST_USD` and `MAX_RUN_TOKENS` to enforce per-run provider limits;
 zero disables the corresponding limit. `TELEMETRY_MAX_BYTES` bounds local JSONL
 growth, while the GitHub workflow stores redacted checkpoints, memory, and
-telemetry under the planning artifact with a 14-day retention policy.
+telemetry under the planning artifact with a 14-day retention policy. The CI
+secret audit rejects recognizable private keys, provider tokens, AWS access
+keys, and high-entropy credential assignments in source-controlled text.
 
 ## Failure recovery
 
@@ -37,6 +39,26 @@ prints the renderer warning.
 - Set `LLM_TIMEOUT_SECONDS` and repository context budgets before real runs.
 - Enable telemetry only when latency, token, or provider-cost evidence is needed.
 - Review local JSONL telemetry before exporting it outside the development environment.
+- Generate a redacted usage report with `scripts/cost_report.py`; it aggregates
+  stage usage and reports `within_budget`, `exceeded`, or `not_configured`.
+- The workflow writes `cost-summary.json` and the same report to the Actions
+  job summary. A configured token or cost overage fails the planning job.
+
+## Retention and purge
+
+GitHub planning artifacts expire automatically after 14 days. Local checkpoint
+runs are retained according to `TELEMETRY_RETENTION_DAYS` (14 days by default)
+when an operator runs the explicit maintenance command:
+
+```bash
+uv run python scripts/prune_artifacts.py \
+  --root .dev-journey/checkpoints \
+  --retention-days 14
+```
+
+The command is dry-run by default and only inspects immediate child run
+directories. Add `--apply` after reviewing the candidates. This keeps purge
+scope explicit and avoids deleting unrelated repository data.
 
 ## Release checks
 

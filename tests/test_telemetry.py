@@ -127,7 +127,7 @@ def test_telemetry_redacts_secrets_and_honors_size_cap(tmp_path):
         telemetry_max_bytes=500,
     )
     recorder = TelemetryRecorder(settings, "run-secret", "blocking")
-    recorder.record_event("security", secret="sk-proj-1234567890", detail="x" * 2_000)
+    recorder.record_event("security", secret="sk-proj-1234567890", detail="x" * 2_000)  # security-audit: allow-test-fixture
 
     assert recorder.retention_limit_reached is True
     assert not (tmp_path / "events.jsonl").exists()

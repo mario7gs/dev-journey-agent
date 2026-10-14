@@ -4,7 +4,7 @@ Portfolio AI agent for turning a vague ticket and an optional GitHub repository
 into a traceable implementation plan: refinement → DoD/contracts → PRD/TRD →
 TDD roadmap → stakeholder export.
 
-## Status: P3 implemented
+## Status: Phase 4 implemented
 
 - ✅ Blocking mode is the default: unresolved Step 0 questions stop approval
 - ✅ Draft mode continues for exploration but cannot be marked approved
@@ -17,6 +17,7 @@ TDD roadmap → stakeholder export.
 - ✅ Portfolio exports: print-safe `FEATURE_SPEC.pdf`, `FEATURE_CASE_STUDY.html`, and presentation PDF
 - ✅ Release polish: CI quality gates, reproducible demo script, and operations/cost documentation
 - ✅ Phase 4 foundations: persisted-data redaction, bounded telemetry, run token/cost budgets, and controlled workflow artifacts
+- ✅ Phase 4 controls: CI secret audit, explicit checkpoint retention pruning, and provider-usage budget reports
 - Outputs: `FEATURE_SPEC.md` (developers) + `FEATURE_SPEC.html` / `FEATURE_SPEC.pdf` (stakeholders) + `FEATURE_CASE_STUDY.html` / `FEATURE_CASE_STUDY.pdf` (portfolio)
 
 The visual system is documented in [`docs/BRAND_GUIDELINES.md`](docs/BRAND_GUIDELINES.md)
@@ -37,6 +38,24 @@ portfolio fixture is described in [`examples/demo/README.md`](examples/demo/READ
 The architecture overview is kept in [`docs/MVP/ARCHITECTURE_CONTEXT.md`](docs/MVP/ARCHITECTURE_CONTEXT.md).
 The end-user walkthrough is available as the standalone [user journey guide](docs/MVP/USER_JOURNEY.html).
 The GitHub-native transformation is tracked in the living [GitHub agent roadmap](docs/MVP/GITHUB_AGENT_ROADMAP.html).
+
+Security and persistence checks can also be run directly:
+
+```bash
+uv run python scripts/security_audit.py .
+uv run python scripts/cost_report.py \
+  --input .dev-journey/telemetry/events.jsonl \
+  --output .dev-journey/cost-summary.json \
+  --max-run-cost-usd 1.00 \
+  --max-run-tokens 50000
+uv run python scripts/prune_artifacts.py \
+  --root .dev-journey/checkpoints \
+  --retention-days 14
+```
+
+Retention pruning is dry-run by default; add `--apply` only during an
+explicit maintenance operation. GitHub planning artifacts use the workflow's
+14-day retention policy and expire automatically.
 
 ## Quickstart
 
