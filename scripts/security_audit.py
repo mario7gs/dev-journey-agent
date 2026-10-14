@@ -55,7 +55,7 @@ def _looks_live(value: str) -> bool:
 def scan_text(text: str, path: Path) -> list[Finding]:
     findings: list[Finding] = []
     for line_number, line in enumerate(text.splitlines(), start=1):
-        if "security-audit: allow-test-fixture" in line:
+        if "tests" in path.parts and "security-audit: allow-test-fixture" in line:
             continue
         for kind, pattern in _TOKEN_PATTERNS:
             if pattern.search(line):
