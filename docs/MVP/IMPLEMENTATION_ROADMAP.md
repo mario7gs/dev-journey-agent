@@ -112,6 +112,51 @@ deterministic draft artifact bundle from the fixed mock fixture. Configuration,
 privacy boundaries, failure recovery, and cost controls are documented in
 `docs/OPERATIONS.md` and linked from the README.
 
+### 5. Portfolio quick-win demo and artifact index — queued for next session
+
+**Purpose:** make the project's value obvious in one credential-free command.
+
+**Implementation sequence:**
+
+1. Add `scripts/run_portfolio_demo.sh`, a wrapper that runs an approved mock
+   scenario and an intentionally blocked/draft scenario.
+2. Write the two reviewable bundles under
+   `artifacts/demo/approved/` and `artifacts/demo/needs-input/`.
+3. Generate a small `DEMO_SUMMARY.html` index showing statuses, outputs,
+   checkpoints, telemetry, budgets, and the security-audit result.
+4. Treat the expected provisional exit code `2` as an internal result for the
+   needs-input scenario while requiring the wrapper itself to exit `0` only
+   when both scenarios and artifact assertions pass.
+5. Update the README and demo documentation with a 60-second quickstart and
+   expected outputs.
+6. Refresh portfolio evidence counts and verification dates.
+
+**Acceptance criteria:**
+
+- Runs without API keys or GitHub credentials.
+- The approved scenario reports `approved`/`success` and exit `0`.
+- The needs-input scenario reports `needs_input` or `draft` and preserves
+  provisional exit `2` internally.
+- The summary links to Markdown, HTML, PDF, case-study, checkpoint,
+  telemetry, cost, and security evidence where produced.
+- Automated verification covers the wrapper and generated index.
+
+**Status:** first implementation job for the next session.
+
+### 6. Possible future integrations — deferred
+
+The CLI and GitHub Action remain the core supported surfaces while the
+portfolio demo is polished. Possible later enhancements include:
+
+- a local skill wrapper for Codex, Claude, or OpenCode;
+- an MCP server exposing plan, resume, status, and artifact tools;
+- a hosted HTTPS MCP service with authentication;
+- automatic issue/PR triggers and richer dashboards; and
+- provider-specific chat adapters, including Gemini-oriented entry points.
+
+These are optional adapters, not prerequisites for the portfolio MVP. They are
+explicitly deferred until the credential-free demo is easy to run and review.
+
 ## Next-session starting checklist
 
 - [x] Read this roadmap and confirm the checkpoint/resume scope.
@@ -123,6 +168,9 @@ privacy boundaries, failure recovery, and cost controls are documented in
 - [x] Implement portfolio PDF and case-study presentation exports.
 - [x] Add CI and local release verification checks.
 - [x] Add a reproducible demo artifact workflow and operations documentation.
+- [ ] Implement the credential-free two-scenario portfolio demo and artifact index.
+- [ ] Add the one-command quickstart and generated evidence assertions.
+- [ ] Refresh the portfolio-facing evidence after the demo is verified.
 
 ## Queue rules
 
@@ -132,3 +180,7 @@ privacy boundaries, failure recovery, and cost controls are documented in
 - Keep release checks reproducible with the pinned `uv.lock` environment.
 - Treat `docs/BRAND_GUIDELINES.html` as the only canonical brand-guide file.
 - Keep `MEMORY.md` append-only; use versioned run state for machine resume.
+- Keep the next demo deterministic, credential-free, and reviewable in under a
+  minute.
+- Treat MCP, chat-provider adapters, hosted services, and automatic triggers as
+  deferred enhancements rather than prerequisites for the next milestone.

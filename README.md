@@ -4,7 +4,7 @@ Portfolio AI agent for turning a vague ticket and an optional GitHub repository
 into a traceable implementation plan: refinement → DoD/contracts → PRD/TRD →
 TDD roadmap → stakeholder export.
 
-## Status: Phase 4 implemented
+## Status: Phases 0–5 implemented · portfolio quick-win queued
 
 - ✅ Blocking mode is the default: unresolved Step 0 questions stop approval
 - ✅ Draft mode continues for exploration but cannot be marked approved
@@ -89,6 +89,20 @@ To demonstrate the fixed semantic-search fixture explicitly:
 ```bash
 uv run python src/main.py --ticket "Demo" --demo --mode draft
 ```
+
+### Portfolio quick-win queued for the next session
+
+The next implementation milestone is a credential-free, one-command portfolio
+demo with two visible outcomes: an approved plan and an intentionally
+needs-input/draft plan. It will generate a compact `DEMO_SUMMARY.html` linking
+the outputs, checkpoints, telemetry, budget report, and security evidence.
+
+The current deterministic fixture remains available through
+`bash scripts/run_demo.sh`. The planned wrapper is
+`bash scripts/run_portfolio_demo.sh` and will be added in the next session.
+MCP, Codex/Claude/OpenCode skill wrappers, hosted services, and other provider
+integrations are recorded as possible future enhancements, not prerequisites
+for this portfolio milestone.
 
 Every completed stage writes an atomic, versioned checkpoint under
 `.dev-journey/checkpoints/<run-id>/` (configurable with `CHECKPOINT_DIR`). If a

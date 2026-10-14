@@ -106,8 +106,8 @@
     </div>
     <div class="eyebrow">Implementation dashboard</div>
     <h1>Operational and portfolio foundation complete.</h1>
-    <p class="hero-copy">The planning pipeline, durable recovery, run-cost evidence, portfolio exports, and release checks are implemented. The remaining work is routine maintenance and future enhancements.</p>
-    <div class="hero-meta">Last verified: 2026-10-12 · Source: <code>docs/MVP/IMPLEMENTATION_ROADMAP.md</code></div>
+    <p class="hero-copy">The planning pipeline, durable recovery, run-cost evidence, portfolio exports, and release checks are implemented. The next focused enhancement is a credential-free two-scenario portfolio demo.</p>
+    <div class="hero-meta">Last verified: 2026-10-14 · Source: <code>docs/MVP/IMPLEMENTATION_ROADMAP.md</code></div>
   </header>
 
   <main>
@@ -115,10 +115,10 @@
       <h2 id="summary-title">Current status</h2>
       <div class="grid">
         <div class="metric"><span class="metric-value">5</span><span class="metric-label">delivery tracks complete</span></div>
-        <div class="metric"><span class="metric-value">0</span><span class="metric-label">queued tracks remaining</span></div>
-        <div class="metric"><span class="metric-value">55</span><span class="metric-label">automated tests passing</span></div>
+        <div class="metric"><span class="metric-value">1</span><span class="metric-label">queued enhancement</span></div>
+        <div class="metric"><span class="metric-value">73</span><span class="metric-label">automated tests passing</span></div>
       </div>
-      <p class="callout"><strong>Current state:</strong> all roadmap tracks are implemented. Ongoing work is maintenance, live renderer verification, and future product enhancements.</p>
+      <p class="callout"><strong>Current state:</strong> the operational foundation is complete. The next portfolio quick-win is a credential-free approved/needs-input demo with a linked artifact summary; MCP and other integrations remain deferred.</p>
     </section>
 
     <section class="card" aria-labelledby="roadmap-title">
@@ -157,6 +157,12 @@
             <td>CI workflow, local verification script, deterministic demo artifact workflow, operations documentation, and README entry point.</td>
             <td>Routine maintenance, live PDF renderer verification, and future product enhancements.</td>
           </tr>
+          <tr>
+            <td><strong>Portfolio quick-win demo</strong></td>
+            <td><span class="status next">UP NEXT</span></td>
+            <td>Queued two-scenario credential-free run with approved and needs-input outcomes.</td>
+            <td>Add <code>run_portfolio_demo.sh</code>, generated <code>DEMO_SUMMARY.html</code>, and evidence assertions.</td>
+          </tr>
         </tbody>
       </table>
     </section>
@@ -174,8 +180,8 @@
     </section>
 
     <section class="card" aria-labelledby="next-title">
-      <h2 id="next-title">Ongoing maintenance</h2>
-      <p>All planned implementation tracks are complete. Keep the release checks green, run the deterministic demo when artifacts need refreshing, and perform final PDF visual review in an environment with a working Chromium renderer.</p>
+      <h2 id="next-title">Next enhancement</h2>
+      <p>Implement the two-scenario portfolio demo first, keeping it deterministic, credential-free, and reviewable in under a minute. After that, keep the release checks green, refresh artifacts when needed, and perform final PDF visual review in an environment with a working Chromium renderer.</p>
       <p class="muted">Reference: <a href="IMPLEMENTATION_ROADMAP.md">implementation roadmap</a> · <a href="GITHUB_AGENT_ROADMAP.html">GitHub agent path</a> · <a href="../OPERATIONS.md">operations notes</a> · <a href="USER_JOURNEY.html">user journey</a> · <a href="../BRAND_GUIDELINES.html">brand guidelines</a></p>
     </section>
   </main>

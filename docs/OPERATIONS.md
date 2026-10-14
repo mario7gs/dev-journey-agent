@@ -82,3 +82,16 @@ The deterministic portfolio fixture is generated with:
 ```bash
 bash scripts/run_demo.sh
 ```
+
+## Portfolio demo path
+
+`scripts/run_demo.sh` is the current deterministic draft fixture and requires
+no provider credentials. The next queued milestone is
+`scripts/run_portfolio_demo.sh`: it will run approved and needs-input scenarios
+and generate a linked `DEMO_SUMMARY.html` artifact index. The wrapper will
+return success only when both expected outcomes and their evidence files are
+present.
+
+This portfolio validation path stays CLI-first and credential-free. MCP,
+provider-specific chat adapters, hosted services, and automatic issue/PR
+triggers are deferred enhancements and are not operational prerequisites.

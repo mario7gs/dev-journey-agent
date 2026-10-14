@@ -232,3 +232,15 @@ approved=True missing=[]
 
 ## [2026-10-14T14:00:08+00:00] Step4-export — done
 wrote /tmp/dev-journey-agent-matrix.IFG499/normal/FEATURE_SPEC.md + /tmp/dev-journey-agent-matrix.IFG499/normal/FEATURE_SPEC.html + /tmp/dev-journey-agent-matrix.IFG499/normal/FEATURE_CASE_STUDY.html
+
+## [2026-10-14T17:30:00+02:00] Portfolio quick-win — queued
+The next implementation milestone is a credential-free two-scenario portfolio
+demo: one approved mock run and one intentionally needs-input/draft run,
+collected under separate artifact bundles and indexed by `DEMO_SUMMARY.html`.
+The wrapper must make the expected provisional exit code explicit and exit
+successfully only when both scenario outcomes and artifact assertions pass.
+
+The project remains CLI/GitHub-Action-first for this milestone. MCP, Codex,
+Claude, OpenCode, Gemini, hosted-service, automatic-trigger, and richer
+dashboard integrations are recorded as deferred possible future features until
+the quick-win demo is polished and easy to review.

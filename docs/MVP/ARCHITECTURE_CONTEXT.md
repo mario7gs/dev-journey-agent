@@ -114,5 +114,5 @@ Plaintextdev-journey-agent/
     ├── test_export.py
     ├── test_pipeline_modes.py
     ├── test_telemetry.py
-    └── ...                      # suite completa (55 test)
+    └── ...                      # suite completa (73 test)
 
