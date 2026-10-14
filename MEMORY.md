@@ -8,9 +8,9 @@ The private repository `mario7gs/dev-journey-agent` is connected and uses the
 `main` default branch. Baseline commit `c5cea69`, CI workflow commit
 `3dcc981`, and packaging/documentation commit `bcbcd04` are published. The
 manual planning action was added as connector commit `4fe71e6` because the
-available Git push token lacks the `workflow` scope. The remaining queue item
-is the first release exercise and tag after running blocked, draft, normal, and
-resumed scenarios.
+available Git push token lacks the `workflow` scope. The release matrix passed
+with expected exit codes 2 (blocked), 2 (draft), 0 (normal), and 0 (resumed).
+Release tag `v0.1.0` is published; the GitHub-native queue is complete.
 
 ## [2026-10-12T22:50:00+02:00] GitHub-agent handoff — scheduled
 The GitHub plugin is authenticated for repository read access, but no
