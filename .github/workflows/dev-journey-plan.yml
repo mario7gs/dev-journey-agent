@@ -25,13 +25,30 @@ on:
         options:
           - blocking
           - draft
-
-permissions:
-  contents: read
+      publish_status:
+        description: Publish the result as a commit status
+        required: true
+        default: true
+        type: boolean
+      comment_target:
+        description: Optional issue or pull request to comment on
+        required: true
+        default: none
+        type: choice
+        options:
+          - none
+          - issue
+          - pull_request
+      comment_number:
+        description: Issue or pull request number when comment_target is selected
+        required: false
+        type: string
 
 jobs:
   plan:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       USE_MOCK_LLM: "true"
@@ -54,7 +71,8 @@ jobs:
             --repo "${{ inputs.repo }}" \
             --branch "${{ inputs.branch }}" \
             --mode "${{ inputs.mode }}" \
-            --out-dir artifacts/plan
+            --out-dir artifacts/plan \
+            --status-file artifacts/plan/run-status.json
           status=$?
           set -e
           printf 'exit_code=%s\nmode=%s\n' "$status" "${{ inputs.mode }}" > artifacts/plan/run-status.txt
@@ -69,3 +87,92 @@ jobs:
           name: dev-journey-plan
           path: artifacts/plan/
           if-no-files-found: error
+
+  review-signals:
+    if: always()
+    needs: plan
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      issues: write
+      statuses: write
+    steps:
+      - name: Download planning status
+        uses: actions/download-artifact@v4
+        with:
+          name: dev-journey-plan
+          path: artifacts/plan
+        continue-on-error: true
+      - name: Publish status and optional review comment
+        if: ${{ inputs.publish_status || inputs.comment_target != 'none' }}
+        uses: actions/github-script@v7
+        env:
+          COMMENT_NUMBER: ${{ inputs.comment_number }}
+          COMMENT_TARGET: ${{ inputs.comment_target }}
+          PLAN_JOB_RESULT: ${{ needs.plan.result }}
+          PUBLISH_STATUS: ${{ inputs.publish_status }}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            const path = 'artifacts/plan/run-status.json';
+            let payload;
+            if (fs.existsSync(path)) {
+              payload = JSON.parse(fs.readFileSync(path, 'utf8'));
+            } else {
+              payload = {
+                status: process.env.PLAN_JOB_RESULT === 'success' ? 'unknown' : 'failed',
+                github_status: 'error',
+                exit_code: null,
+                block_reasons: ['The planning job did not produce a status payload.'],
+              };
+            }
+
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const runUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const descriptions = {
+              success: 'Approved plan generated.',
+              pending: 'Draft plan generated; human review is still required.',
+              failure: 'Input or clarification is required before approval.',
+              error: 'The planning run failed before producing an approved result.',
+            };
+            const state = payload.github_status || 'error';
+            const description = descriptions[state] || 'Review signal published.';
+
+            if (process.env.PUBLISH_STATUS === 'true') {
+              await github.rest.repos.createCommitStatus({
+                owner,
+                repo,
+                sha: context.sha,
+                state,
+                context: 'dev-journey/plan',
+                description,
+                target_url: runUrl,
+              });
+            }
+
+            const target = process.env.COMMENT_TARGET;
+            const numberText = process.env.COMMENT_NUMBER;
+            if (target !== 'none') {
+              if (!/^\d+$/.test(numberText || '') || Number(numberText) < 1) {
+                core.setFailed('comment_number must be a positive issue or pull request number when commenting is enabled.');
+                return;
+              }
+              const reasons = (payload.block_reasons || []).slice(0, 5);
+              const reasonText = reasons.length ? `\\n\\nBlocking reasons:\\n${reasons.map((reason) => `- ${reason}`).join('\\n')}` : '';
+              const body = [
+                '<!-- dev-journey-agent -->',
+                `## Dev Journey plan: **${payload.status || 'unknown'}**`,
+                description,
+                `\\n[View workflow run](${runUrl}) and download the review artifacts.`,
+                reasonText,
+                '\\nNo source-code changes, merges, or deployments were performed.',
+              ].join('\\n');
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: Number(numberText),
+                body,
+              });
+            }
