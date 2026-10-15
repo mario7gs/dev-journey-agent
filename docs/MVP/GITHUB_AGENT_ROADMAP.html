@@ -155,13 +155,13 @@ jobs:
         <tr><td>4</td><td>Add the <code>dev-journey</code> console entry point and document versioned installation.</td><td><span class="status done">DONE</span></td><td><code>uv run dev-journey --help</code> passes; package metadata exposes the stable console command.</td></tr>
         <tr><td>5</td><td>Add the manual <code>workflow_dispatch</code> action with read-only permissions and artifact upload.</td><td><span class="status done">DONE</span></td><td>Action <code>.github/workflows/dev-journey-plan.yml</code> is present with <code>contents: read</code> and artifact upload.</td></tr>
         <tr><td>6</td><td>Exercise blocked, draft, normal, and resumed runs, then prepare the first private-repository release.</td><td><span class="status done">DONE</span></td><td>Matrix passed with expected exit codes 2, 2, 0, and 0; tag <code>v0.1.0</code> is published.</td></tr>
-        <tr><td>7</td><td>Build the credential-free two-scenario portfolio demo and visual artifact index.</td><td><span class="status next">UP NEXT</span></td><td>Scheduled as the first implementation job for the next session; MCP and other integrations are deferred.</td></tr>
+        <tr><td>7</td><td>Build the credential-free two-scenario portfolio demo and visual artifact index.</td><td><span class="status done">DONE</span></td><td><code>scripts/run_portfolio_demo.sh</code> produces approved and needs-input bundles plus <code>DEMO_SUMMARY.html</code>; focused verification passes.</td></tr>
       </tbody></table>
     </section>
 
     <section class="card" aria-labelledby="portfolio-title">
-      <h2 id="portfolio-title">Next portfolio quick-win</h2>
-      <p><span class="status next">UP NEXT</span> Add a one-command demo that produces two visibly different outcomes: an approved plan and an intentionally needs-input/draft plan.</p>
+      <h2 id="portfolio-title">Portfolio quick-win delivered</h2>
+      <p><span class="status done">DONE</span> The one-command demo produces two visibly different outcomes: an approved plan and an intentionally needs-input/draft plan.</p>
       <ul><li>Keep both scenarios credential-free and deterministic.</li><li>Store separate bundles and generate <code>DEMO_SUMMARY.html</code> with links to plans, checkpoints, telemetry, cost, and security evidence.</li><li>Make the wrapper exit <code>0</code> only when both expected outcomes and artifact assertions pass.</li></ul>
       <p class="muted">MCP, local skill wrappers for Codex/Claude/OpenCode, hosted services, provider-specific chat adapters, automatic triggers, and richer dashboards are possible future features, not prerequisites for this milestone.</p>
     </section>
@@ -173,11 +173,12 @@ jobs:
         <tr><td>2026-10-12</td><td>Initialized local Git baseline</td><td><span class="status done">READY</span></td><td>Local <code>main</code> branch is initialized; no commit was created because no Git author identity is configured.</td></tr>
         <tr><td>2026-10-12</td><td>GitHub connector authentication</td><td><span class="status done">VERIFIED</span></td><td>Authenticated account access and private repository listing were verified through the GitHub plugin.</td></tr>
         <tr><td>2026-10-14</td><td>Private repository connected</td><td><span class="status done">DONE</span></td><td><code>mario7gs/dev-journey-agent</code> verified private with push access and default branch <code>main</code>.</td></tr>
-        <tr><td>2026-10-14</td><td>Baseline, CLI package, and manual action</td><td><span class="status done">DONE</span></td><td>Baseline and CI are on <code>main</code>; the console command and manual workflow are published; 73 tests, lint, type checks, and HTML parsing pass.</td></tr>
+        <tr><td>2026-10-14</td><td>Baseline, CLI package, and manual action</td><td><span class="status done">DONE</span></td><td>Baseline and CI are on <code>main</code>; the console command and manual workflow are published; 74 tests, lint, type checks, and HTML parsing pass.</td></tr>
         <tr><td>2026-10-14</td><td>Release matrix and v0.1.0</td><td><span class="status done">DONE</span></td><td>Blocked, draft, normal, and resumed scenarios passed; the first private-repository release tag is published.</td></tr>
         <tr><td>2026-10-14</td><td>Review and team signals</td><td><span class="status done">DONE</span></td><td>Machine-readable status payloads, commit status publication, and opt-in issue/PR comments are implemented without source-code mutation.</td></tr>
         <tr><td>2026-10-14</td><td>Security and persistence</td><td><span class="status done">DONE</span></td><td>Redaction, CI secret scanning, provider budget reports, explicit checkpoint pruning, and 14-day controlled artifact retention are implemented and verified.</td></tr>
-        <tr><td>2026-10-14</td><td>Portfolio quick-win decision</td><td><span class="status next">UP NEXT</span></td><td>The two-scenario credential-free demo and <code>DEMO_SUMMARY.html</code> are scheduled first for the next session; MCP and other integrations are deferred.</td></tr>
+        <tr><td>2026-10-14</td><td>Portfolio quick-win decision</td><td><span class="status done">DONE</span></td><td>The two-scenario credential-free demo and <code>DEMO_SUMMARY.html</code> were selected as the next implementation milestone; MCP and other integrations remain deferred.</td></tr>
+        <tr><td>2026-10-15</td><td>Portfolio quick-win implementation</td><td><span class="status done">DONE</span></td><td>The wrapper, focused subprocess test, summary index, cost reports, and security evidence are implemented; the full suite passes with 74 tests.</td></tr>
       </tbody></table>
     </section>
 

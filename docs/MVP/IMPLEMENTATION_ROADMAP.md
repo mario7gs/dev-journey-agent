@@ -112,7 +112,7 @@ deterministic draft artifact bundle from the fixed mock fixture. Configuration,
 privacy boundaries, failure recovery, and cost controls are documented in
 `docs/OPERATIONS.md` and linked from the README.
 
-### 5. Portfolio quick-win demo and artifact index — queued for next session
+### 5. Portfolio quick-win demo and artifact index — implemented
 
 **Purpose:** make the project's value obvious in one credential-free command.
 
@@ -141,7 +141,12 @@ privacy boundaries, failure recovery, and cost controls are documented in
   telemetry, cost, and security evidence where produced.
 - Automated verification covers the wrapper and generated index.
 
-**Status:** first implementation job for the next session.
+**Delivered:** `scripts/run_portfolio_demo.sh` now runs an approved health-check
+scenario and an intentionally needs-input demo scenario without credentials.
+It preserves the internal exit-code distinction, writes separate evidence
+bundles, generates `DEMO_SUMMARY.html`, runs the security audit, and produces
+redacted cost summaries for both cases. Focused subprocess verification covers
+the wrapper and the generated index.
 
 ### 6. Possible future integrations — deferred
 
@@ -168,9 +173,9 @@ explicitly deferred until the credential-free demo is easy to run and review.
 - [x] Implement portfolio PDF and case-study presentation exports.
 - [x] Add CI and local release verification checks.
 - [x] Add a reproducible demo artifact workflow and operations documentation.
-- [ ] Implement the credential-free two-scenario portfolio demo and artifact index.
-- [ ] Add the one-command quickstart and generated evidence assertions.
-- [ ] Refresh the portfolio-facing evidence after the demo is verified.
+- [x] Implement the credential-free two-scenario portfolio demo and artifact index.
+- [x] Add the one-command quickstart and generated evidence assertions.
+- [x] Refresh the portfolio-facing evidence after the demo is verified.
 
 ## Queue rules
 

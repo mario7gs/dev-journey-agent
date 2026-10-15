@@ -244,3 +244,11 @@ The project remains CLI/GitHub-Action-first for this milestone. MCP, Codex,
 Claude, OpenCode, Gemini, hosted-service, automatic-trigger, and richer
 dashboard integrations are recorded as deferred possible future features until
 the quick-win demo is polished and easy to review.
+
+## [2026-10-15T16:45:00+02:00] Portfolio quick-win — implemented
+Implemented `scripts/run_portfolio_demo.sh` with two credential-free mock
+scenarios: an approved health-check plan and a needs-input safety-gate plan.
+The wrapper writes separate evidence bundles, cost summaries, security-audit
+output, and `DEMO_SUMMARY.html`; it returns zero only after both expected
+outcomes and artifact assertions pass. Added focused subprocess verification;
+the full suite now passes 74 tests.

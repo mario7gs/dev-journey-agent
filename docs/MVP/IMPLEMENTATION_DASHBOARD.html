@@ -106,19 +106,19 @@
     </div>
     <div class="eyebrow">Implementation dashboard</div>
     <h1>Operational and portfolio foundation complete.</h1>
-    <p class="hero-copy">The planning pipeline, durable recovery, run-cost evidence, portfolio exports, and release checks are implemented. The next focused enhancement is a credential-free two-scenario portfolio demo.</p>
-    <div class="hero-meta">Last verified: 2026-10-14 · Source: <code>docs/MVP/IMPLEMENTATION_ROADMAP.md</code></div>
+    <p class="hero-copy">The planning pipeline, durable recovery, run-cost evidence, portfolio exports, release checks, and the credential-free two-scenario portfolio demo are implemented.</p>
+    <div class="hero-meta">Last verified: 2026-10-15 · Source: <code>docs/MVP/IMPLEMENTATION_ROADMAP.md</code></div>
   </header>
 
   <main>
     <section class="card summary" aria-labelledby="summary-title">
       <h2 id="summary-title">Current status</h2>
       <div class="grid">
-        <div class="metric"><span class="metric-value">5</span><span class="metric-label">delivery tracks complete</span></div>
-        <div class="metric"><span class="metric-value">1</span><span class="metric-label">queued enhancement</span></div>
-        <div class="metric"><span class="metric-value">73</span><span class="metric-label">automated tests passing</span></div>
+        <div class="metric"><span class="metric-value">6</span><span class="metric-label">delivery tracks complete</span></div>
+        <div class="metric"><span class="metric-value">0</span><span class="metric-label">queued enhancements</span></div>
+        <div class="metric"><span class="metric-value">74</span><span class="metric-label">automated tests passing</span></div>
       </div>
-      <p class="callout"><strong>Current state:</strong> the operational foundation is complete. The next portfolio quick-win is a credential-free approved/needs-input demo with a linked artifact summary; MCP and other integrations remain deferred.</p>
+      <p class="callout"><strong>Current state:</strong> the operational foundation and portfolio quick-win are complete. MCP and other integrations remain intentionally deferred.</p>
     </section>
 
     <section class="card" aria-labelledby="roadmap-title">
@@ -159,9 +159,9 @@
           </tr>
           <tr>
             <td><strong>Portfolio quick-win demo</strong></td>
-            <td><span class="status next">UP NEXT</span></td>
-            <td>Queued two-scenario credential-free run with approved and needs-input outcomes.</td>
-            <td>Add <code>run_portfolio_demo.sh</code>, generated <code>DEMO_SUMMARY.html</code>, and evidence assertions.</td>
+            <td><span class="status done">DONE</span></td>
+            <td>Two-scenario credential-free run with approved and needs-input outcomes, separate bundles, cost summaries, and security evidence.</td>
+            <td>Maintain the wrapper and refresh the generated proof when the pipeline changes.</td>
           </tr>
         </tbody>
       </table>
@@ -180,8 +180,8 @@
     </section>
 
     <section class="card" aria-labelledby="next-title">
-      <h2 id="next-title">Next enhancement</h2>
-      <p>Implement the two-scenario portfolio demo first, keeping it deterministic, credential-free, and reviewable in under a minute. After that, keep the release checks green, refresh artifacts when needed, and perform final PDF visual review in an environment with a working Chromium renderer.</p>
+      <h2 id="next-title">Ongoing maintenance</h2>
+      <p>Keep the release checks green, refresh the two-scenario portfolio evidence when the pipeline changes, and perform final PDF visual review in an environment with a working Chromium renderer. MCP and other integrations remain future enhancements.</p>
       <p class="muted">Reference: <a href="IMPLEMENTATION_ROADMAP.md">implementation roadmap</a> · <a href="GITHUB_AGENT_ROADMAP.html">GitHub agent path</a> · <a href="../OPERATIONS.md">operations notes</a> · <a href="USER_JOURNEY.html">user journey</a> · <a href="../BRAND_GUIDELINES.html">brand guidelines</a></p>
     </section>
   </main>

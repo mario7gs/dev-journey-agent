@@ -4,7 +4,7 @@ Portfolio AI agent for turning a vague ticket and an optional GitHub repository
 into a traceable implementation plan: refinement → DoD/contracts → PRD/TRD →
 TDD roadmap → stakeholder export.
 
-## Status: Phases 0–5 implemented · portfolio quick-win queued
+## Status: Portfolio quick-win implemented
 
 - ✅ Blocking mode is the default: unresolved Step 0 questions stop approval
 - ✅ Draft mode continues for exploration but cannot be marked approved
@@ -90,19 +90,24 @@ To demonstrate the fixed semantic-search fixture explicitly:
 uv run python src/main.py --ticket "Demo" --demo --mode draft
 ```
 
-### Portfolio quick-win queued for the next session
+### Portfolio quick-win: one command, two outcomes
 
-The next implementation milestone is a credential-free, one-command portfolio
-demo with two visible outcomes: an approved plan and an intentionally
-needs-input/draft plan. It will generate a compact `DEMO_SUMMARY.html` linking
-the outputs, checkpoints, telemetry, budget report, and security evidence.
+Run the credential-free portfolio demonstration with two visible outcomes: an
+approved plan and an intentionally needs-input plan.
 
-The current deterministic fixture remains available through
-`bash scripts/run_demo.sh`. The planned wrapper is
-`bash scripts/run_portfolio_demo.sh` and will be added in the next session.
+```bash
+bash scripts/run_portfolio_demo.sh
+```
+
+It generates `artifacts/demo/DEMO_SUMMARY.html`, separate approved and
+needs-input bundles, checkpoints, telemetry, cost summaries, and security
+evidence. The wrapper exits `0` only when both expected scenarios pass.
+
+The original deterministic draft fixture remains available through
+`bash scripts/run_demo.sh`.
 MCP, Codex/Claude/OpenCode skill wrappers, hosted services, and other provider
-integrations are recorded as possible future enhancements, not prerequisites
-for this portfolio milestone.
+integrations remain possible future enhancements, not prerequisites for this
+portfolio experience.
 
 Every completed stage writes an atomic, versioned checkpoint under
 `.dev-journey/checkpoints/<run-id>/` (configurable with `CHECKPOINT_DIR`). If a

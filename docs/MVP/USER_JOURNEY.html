@@ -185,7 +185,7 @@
           <p class="muted">Blocking mode is the default. If the request has unresolved questions, the command exports a clarification report and exits with a provisional status.</p>
         </div>
       </div>
-      <div class="callout" style="margin-top: 1.2rem"><strong>Guided demo:</strong> run <code>bash scripts/run_demo.sh</code> to generate a deterministic draft bundle under <code>artifacts/demo/</code>. The wrapper handles the expected provisional exit code for you.</div>
+      <div class="callout" style="margin-top: 1.2rem"><strong>Guided demo:</strong> run <code>bash scripts/run_portfolio_demo.sh</code> to generate approved and needs-input bundles plus <code>DEMO_SUMMARY.html</code> under <code>artifacts/demo/</code>. The wrapper handles the expected provisional exit code for you.</div>
     </section>
 
     <section class="card" aria-labelledby="tools-title">
@@ -237,6 +237,7 @@
         <tbody>
           <tr><td>Explore without approval pressure</td><td><code>uv run python src/main.py --ticket "..." --mode draft</code></td><td>Continues through planning but remains explicitly provisional.</td></tr>
           <tr><td>Run the deterministic fixture</td><td><code>bash scripts/run_demo.sh</code></td><td>Creates a reviewable artifact bundle without API keys.</td></tr>
+          <tr><td>Run the portfolio proof</td><td><code>bash scripts/run_portfolio_demo.sh</code></td><td>Creates approved and needs-input evidence bundles plus a visual summary without API keys.</td></tr>
           <tr><td>Resume after interruption</td><td><code>uv run python src/main.py --resume &lt;run-id&gt;</code></td><td>Reuses completed checkpoints and avoids repeating completed model stages.</td></tr>
           <tr><td>Inspect quality locally</td><td><code>bash scripts/verify.sh</code></td><td>Runs tests, Ruff, mypy, HTML checks, and the package build when available.</td></tr>
           <tr><td>Enable run evidence</td><td><code>PHOENIX_ENABLED=true ...</code></td><td>Writes local JSONL telemetry and optionally bridges to Phoenix.</td></tr>
