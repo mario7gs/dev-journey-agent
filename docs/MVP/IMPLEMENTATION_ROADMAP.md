@@ -146,14 +146,66 @@ scenario and an intentionally needs-input demo scenario without credentials.
 It preserves the internal exit-code distinction, writes separate evidence
 bundles, generates `DEMO_SUMMARY.html`, runs the security audit, and produces
 redacted cost summaries for both cases. Focused subprocess verification covers
-the wrapper and the generated index.
+the wrapper and the generated index. The stakeholder report, case-study
+presentation, and portfolio summary now use the approved v19 mark and canonical
+brand tokens; regression checks reject the superseded palette.
 
-### 6. Possible future integrations — deferred
+### 6. Approved portfolio artifact contract — locked
+
+The following artifact presentation is now part of the approved portfolio
+baseline and should not change incidentally:
+
+- The v19 logo and full lockup are used consistently across the stakeholder
+  report, case-study presentation, and `DEMO_SUMMARY.html`.
+- The lockup reads `DEV JOURNEY` with `AGENT · FEATURE PLANNING COPILOT` below
+  it, using the canonical brand tokens and typography.
+- Each artifact has a sticky navigation bar with section buttons that target
+  semantic anchors in the document; the navigation is hidden for print output.
+- Generated artifacts remain self-contained, reviewable, and linked to their
+  evidence bundles.
+
+This is the visual acceptance baseline for the portfolio MVP. Any future
+visual change requires an explicit design decision and an update to the brand
+guidelines, artifact tests, and generated evidence.
+
+**Evidence:** generated approved and needs-input bundles, `DEMO_SUMMARY.html`,
+the shared templates/CSS, focused navigation assertions, and the full
+83-test release verification.
+
+### 7. Provider-neutral local skill wrapper — implemented
+
+**Purpose:** make the approved CLI workflow easy to invoke from a local
+agentic tool without coupling the core pipeline to one provider.
+
+**Implementation scope:**
+
+1. Define a small provider-neutral skill contract for ticket input, repository
+   reference, branch, mode, output directory, and resume ID.
+2. Add a local wrapper that delegates to the existing CLI and returns concise
+   status plus artifact paths.
+3. Preserve blocking/draft semantics, exit codes, checkpoints, telemetry, and
+   the approved artifact contract.
+4. Add a mock-only verification path and documentation showing invocation from
+   a generic local skill runner.
+5. Keep the CLI and GitHub Action as the core supported surfaces.
+
+**Explicitly out of scope:** MCP, Codex/Claude/OpenCode/Gemini-specific
+adapters, hosted services, and automatic issue/PR integrations. Those remain
+future enhancements.
+
+**Delivered:** `scripts/run_local_skill.py` accepts a versioned JSON request
+from stdin or a request file, delegates to the existing CLI without a shell,
+and emits structured status, exit code, run ID, artifact paths, and bundle
+location. Each run isolates memory, checkpoints, telemetry, and redacted
+console output under its artifact directory. Focused tests cover approved
+execution, invalid input, needs-input exit preservation, secret-safe logs, and
+resume-mode handling.
+
+### 8. Possible future integrations — deferred
 
 The CLI and GitHub Action remain the core supported surfaces while the
 portfolio demo is polished. Possible later enhancements include:
 
-- a local skill wrapper for Codex, Claude, or OpenCode;
 - an MCP server exposing plan, resume, status, and artifact tools;
 - a hosted HTTPS MCP service with authentication;
 - automatic issue/PR triggers and richer dashboards; and
@@ -161,6 +213,75 @@ portfolio demo is polished. Possible later enhancements include:
 
 These are optional adapters, not prerequisites for the portfolio MVP. They are
 explicitly deferred until the credential-free demo is easy to run and review.
+
+### 9. Delivery-hardening split — Part 2 implemented
+
+The final delivery-hardening work is intentionally split so the portfolio
+project stays useful, credible, and small enough to review.
+
+**Part 1 — engineering release gate (completed this session):**
+
+- rerun the credential-free approved and needs-input portfolio scenarios;
+- refresh the separate artifact bundles and `DEMO_SUMMARY.html` evidence index;
+- verify the frozen logo, palette, lockup, sticky navigation, and print-safe
+  artifact contract;
+- run the full release checks and record the remaining environment-dependent
+  PDF/build limitations.
+
+**Part 2 — visual/publication handoff (implemented this session):**
+
+- attempt final PDF visual QA and record the renderer limitation honestly;
+- attempt the package build and record the offline Hatchling limitation;
+- refresh evidence and add the publication assets; and
+- create a concise, polished slide/case-study package plus LinkedIn- and
+  GitHub-ready presentation assets or guidance.
+
+The final portfolio package is available as the self-contained HTML deck at
+`artifacts/portfolio/DEV_JOURNEY_PORTFOLIO_DECK.html` and the publication kit
+at `docs/PORTFOLIO_PUBLICATION_KIT.md`. The CLI and GitHub Action stay the
+core supported surfaces; MCP, hosted services, provider-specific adapters, and
+automatic issue/PR integrations remain deferred. PDF export remains an
+optional local capability: this sandbox's Chrome and Firefox binaries both
+crash before rendering, so the generated HTML remains the authoritative visual
+review surface until a working renderer is available.
+
+### 10. Real repository validation — completed
+
+The first external validation loop is recorded in
+[`REAL_TEST_CASE_REPORT.md`](REAL_TEST_CASE_REPORT.md). The operator's
+read-only run against `mario7gs/dev-journey-agent@main` approved the health-check
+ticket with exit code `0` and generated the stakeholder and portfolio exports.
+The complementary deterministic ambiguous-ticket run returned `needs_input`
+with exit code `2`, naming the missing search scope/data source. No source,
+issue, pull request, merge, or deployment mutation occurred, and no credential
+value is stored in the report.
+
+### 11. Reproducible real-test runner — implemented
+
+`scripts/run_real_test_case.sh` now makes the external validation repeatable.
+It requires a pre-exported `GITHUB_TOKEN`, runs the approved health-check case
+against the selected repository and branch, then unsets the credential for the
+credential-free needs-input case. It validates both machine-readable status
+payloads and key artifact files while keeping the CLI/GitHub Action as the
+supported product surfaces. A focused test verifies the missing-token guard.
+
+### 12. Portfolio handoff packet — ready
+
+The reviewer-first route is captured in
+[`PORTFOLIO_HANDOFF.md`](PORTFOLIO_HANDOFF.md). It connects the visual deck,
+credential-free demo, real validation report, operations notes, claim-to-
+evidence map, release gate, and explicit deferred scope. This closes the
+portfolio delivery path while keeping PDF visual QA and `uv build` as the only
+environment-dependent follow-ups.
+
+### 13. Public repository and HR-friendly presentation polish — implemented
+
+The GitHub entry point now explains the product in plain language and links to
+the reviewer-first handoff. Added lightweight `CONTRIBUTING.md` and
+`SECURITY.md` guidance. The portfolio deck and publication kit now lead with
+the human problem, explain the workflow without assuming programming
+knowledge, and include an HR-friendly LinkedIn post while preserving the
+technical evidence for engineering readers.
 
 ## Next-session starting checklist
 
@@ -176,6 +297,16 @@ explicitly deferred until the credential-free demo is easy to run and review.
 - [x] Implement the credential-free two-scenario portfolio demo and artifact index.
 - [x] Add the one-command quickstart and generated evidence assertions.
 - [x] Refresh the portfolio-facing evidence after the demo is verified.
+- [x] Lock the approved artifact layout, navigation, logo, and palette contract.
+- [x] Implement the provider-neutral local skill wrapper.
+- [x] Complete Part 1 of delivery hardening and refresh portfolio evidence.
+- [x] Complete Part 2 publication assets and LinkedIn/GitHub support materials.
+- [x] Validate one approved real-repository run and one needs-input safety case;
+  record the sanitized evidence in `REAL_TEST_CASE_REPORT.md`.
+- [x] Add the repeatable `scripts/run_real_test_case.sh` validation runner with
+  a pre-exported-token guard.
+- [ ] Re-run PDF visual QA and `uv build` in an environment with working
+  Chromium and network access to the locked Hatchling backend.
 
 ## Queue rules
 
@@ -184,8 +315,11 @@ explicitly deferred until the credential-free demo is easy to run and review.
 - Keep PDF generation local and optional; do not add a network or runtime download dependency.
 - Keep release checks reproducible with the pinned `uv.lock` environment.
 - Treat `docs/BRAND_GUIDELINES.html` as the only canonical brand-guide file.
+- Treat the approved artifact contract above as frozen until an explicit design
+  decision changes it.
 - Keep `MEMORY.md` append-only; use versioned run state for machine resume.
 - Keep the next demo deterministic, credential-free, and reviewable in under a
   minute.
 - Treat MCP, chat-provider adapters, hosted services, and automatic triggers as
-  deferred enhancements rather than prerequisites for the next milestone.
+  deferred enhancements rather than prerequisites for the local skill-wrapper
+  milestone.

@@ -57,6 +57,15 @@ metadata lines to keep technical content legible for stakeholders.
   in report headers and portfolio surfaces.
 - Use the standalone mark for compact navigation, favicons, and slide corners.
 
+## Approved artifact contract
+
+The portfolio MVP has a frozen presentation baseline. Generated stakeholder
+reports, case studies, and the portfolio demo summary must use the v19 mark and
+the full `DEV JOURNEY` / `AGENT · FEATURE PLANNING COPILOT` lockup. Their
+navigation is a sticky bar with semantic section buttons; it remains visible
+while browsing and is hidden for print output. Changes to this contract require
+an explicit design decision plus updated artifact tests and regenerated proof.
+
 ## Cross-medium application
 
 - HTML: load `src/templates/assets/brand.css`; preserve the semantic tokens and

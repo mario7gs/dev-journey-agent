@@ -22,6 +22,12 @@ def test_presentation_contains_accessible_case_study_sections():
     assert "deliver search" in html
     assert "PDF-ready" in html
     assert 'src="data:image/png;base64,' in html
+    assert "AGENT · FEATURE PLANNING COPILOT" in html
+    assert 'class="site-header"' in html
+    assert 'href="#evidence"' in html
+    assert "position: sticky" in html
+    assert "#6844c4" not in html
+    assert "#16213e" not in html
 
 
 def test_presentation_context_counts_delivery_evidence():

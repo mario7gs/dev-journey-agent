@@ -18,7 +18,6 @@
       --indigo-soft: #e8edff;
       --teal: #0f8b8d;
       --teal-soft: #ddf3f2;
-      --violet: #6844c4;
       --gold: #c89b3c;
       --line: #d8e0ec;
       --success: #18794e;
@@ -41,7 +40,7 @@
       padding: 2rem max(1.2rem, calc((100vw - 1180px) / 2)) 5.5rem;
       background:
         radial-gradient(circle at 84% 20%, rgba(15, 139, 141, .34), transparent 32%),
-        radial-gradient(circle at 10% 95%, rgba(104, 68, 196, .28), transparent 30%),
+        radial-gradient(circle at 10% 95%, rgba(200, 155, 60, .22), transparent 30%),
         linear-gradient(135deg, var(--ink), #12243a 56%, #163f52);
     }
     .lockup { display: flex; align-items: center; gap: .85rem; }
@@ -74,11 +73,11 @@
     .step-number { display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 50%; color: var(--paper); background: var(--indigo); font-size: .78rem; font-weight: 800; }
     .step-button strong { display: block; }
     .step-button small { color: var(--muted); }
-    .journey-panel { min-height: 20rem; padding: clamp(1.2rem, 3vw, 2rem); border-radius: 1rem; color: var(--paper); background: linear-gradient(145deg, #16213e, #273b72); }
+    .journey-panel { min-height: 20rem; padding: clamp(1.2rem, 3vw, 2rem); border-radius: 1rem; color: var(--paper); background: linear-gradient(145deg, var(--ink), #163f52); }
     .journey-panel .eyebrow { margin: 0 0 .7rem; color: #75d6d4; }
     .journey-panel h3 { color: var(--paper); font-size: clamp(1.4rem, 3vw, 2.2rem); }
     .journey-panel p, .journey-panel li { color: rgba(255,255,255,.78); }
-    .journey-panel code { color: #d9f7ec; background: rgba(255,255,255,.1); }
+    .journey-panel code { color: var(--teal-soft); background: rgba(255,255,255,.1); }
     .journey-panel ul { padding-left: 1.2rem; }
     .code-card { overflow: auto; padding: 1.1rem 1.2rem; border: 1px solid #253858; border-radius: .8rem; color: #dce7ff; background: #10182a; font: .84rem/1.65 "JetBrains Mono", ui-monospace, SFMono-Regular, Consolas, monospace; }
     .code-card .comment { color: #7f95bc; }
@@ -121,10 +120,32 @@
       .journey { grid-template-columns: 1fr 1fr; }
       .journey-panel { print-color-adjust: exact; }
     }
+    /* Frozen presentation contract: logo lockup plus sticky section navigation. */
+    html { scroll-behavior: smooth; }
+    header.site-header { position: sticky; top: 0; z-index: 20; padding: 0; color: var(--paper); background: linear-gradient(135deg, var(--ink), #163f52); border-bottom: 1px solid rgba(255,255,255,.14); box-shadow: 0 8px 24px rgba(11,18,32,.16); }
+    .site-header-inner { max-width: 1200px; margin: 0 auto; padding: .78rem 1rem; display: flex; flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .site-brand { display: flex; align-items: center; gap: .7rem; color: var(--paper); text-decoration: none; min-width: max-content; }
+    .site-brand .brand-mark-frame { width: 2.8rem; height: 2.8rem; flex: 0 0 auto; }
+    .site-brand .brand-mark-frame img { width: 100%; height: 100%; display: block; }
+    .site-brand .brand-name, .site-brand .brand-subtitle { display: block; }
+    .site-brand .brand-name { font-size: .74rem; }
+    .site-brand .brand-subtitle { margin-top: .2rem; font-size: .58rem; }
+    .site-nav { display: flex; align-items: center; gap: .35rem; flex-wrap: wrap; width: 100%; }
+    .site-nav a { color: var(--paper); text-decoration: none; padding: .38rem .62rem; border: 1px solid rgba(255,255,255,.25); border-radius: 999px; font-size: .76rem; font-weight: 750; line-height: 1.1; }
+    .site-nav a:hover, .site-nav a:focus-visible { background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.55); }
+    header.report-hero > .lockup, header.report-hero > .brand-lockup { display: none; }
+    section[id], header[id] { scroll-margin-top: 6rem; }
+    @media print { header.site-header { display: none; } }
   </style>
 </head>
 <body data-audience="junior">
-  <header>
+  <header class="site-header" aria-label="User journey navigation">
+    <div class="site-header-inner">
+      <a class="site-brand" href="#overview" aria-label="Dev Journey Agent overview"><span class="brand-mark-frame"><img src="../assets/dj-mark.png" alt="Dev Journey Agent mark"></span><span><span class="brand-name">DEV JOURNEY</span><span class="brand-subtitle">AGENT · FEATURE PLANNING COPILOT</span></span></a>
+      <nav class="site-nav" aria-label="User journey sections"><a href="#overview">Overview</a><a href="#journey">Journey</a><a href="#install">Install</a><a href="#tools">Tools</a><a href="#safety">Safety</a><a href="#next">Next</a></nav>
+    </div>
+  </header>
+  <header class="report-hero" id="overview">
     <div class="lockup">
       <div class="mark"><img src="../assets/dj-mark.png" alt="Dev Journey Agent mark"></div>
       <div>
@@ -146,7 +167,7 @@
       <div>
         <h2 id="outcome-title">What the agent changes</h2>
         <p>Instead of starting implementation from an underspecified request, the team gets a reviewable chain of evidence: repository context, clarified scope, contracts, PRD/TRD, security checks, tests, implementation steps, and stakeholder-ready exports.</p>
-        <div class="status-line"><span class="pill success">Blocking by default</span><span class="pill">Draft mode for exploration</span><span class="pill">Resume after interruption</span><span class="pill">73 tests passing</span></div>
+        <div class="status-line"><span class="pill success">Blocking by default</span><span class="pill">Draft mode for exploration</span><span class="pill">Resume after interruption</span><span class="pill">83 tests passing</span></div>
       </div>
       <div class="callout"><strong>The mental model</strong><br>Give the agent a ticket, let it expose uncertainty, review the evidence, then hand the resulting plan to the team. The agent accelerates planning; the responsible engineer keeps the approval decision.</div>
     </section>
@@ -188,7 +209,7 @@
       <div class="callout" style="margin-top: 1.2rem"><strong>Guided demo:</strong> run <code>bash scripts/run_portfolio_demo.sh</code> to generate approved and needs-input bundles plus <code>DEMO_SUMMARY.html</code> under <code>artifacts/demo/</code>. The wrapper handles the expected provisional exit code for you.</div>
     </section>
 
-    <section class="card" aria-labelledby="tools-title">
+    <section class="card" id="tools" aria-labelledby="tools-title">
       <h2 id="tools-title">Compatible tools and what they do</h2>
       <div class="tool-grid">
         <div class="tool"><strong>Python 3.11+</strong><span>Runs the CLI and typed pipeline.</span></div>
@@ -200,6 +221,7 @@
         <div class="tool"><strong>Chromium</strong><span>Optional local renderer for stakeholder PDFs.</span></div>
         <div class="tool"><strong>Any Git host</strong><span>Works without repository access in mock or ticket-only mode.</span></div>
         <div class="tool"><strong>CI runners</strong><span>GitHub Actions verifies tests, lint, types, HTML, and packaging.</span></div>
+        <div class="tool"><strong>Local skill wrapper</strong><span>Provider-neutral JSON entry point for agentic tools; preserves the CLI contract and artifact evidence.</span></div>
       </div>
     </section>
 
@@ -238,6 +260,7 @@
           <tr><td>Explore without approval pressure</td><td><code>uv run python src/main.py --ticket "..." --mode draft</code></td><td>Continues through planning but remains explicitly provisional.</td></tr>
           <tr><td>Run the deterministic fixture</td><td><code>bash scripts/run_demo.sh</code></td><td>Creates a reviewable artifact bundle without API keys.</td></tr>
           <tr><td>Run the portfolio proof</td><td><code>bash scripts/run_portfolio_demo.sh</code></td><td>Creates approved and needs-input evidence bundles plus a visual summary without API keys.</td></tr>
+          <tr><td>Invoke from an agentic tool</td><td><code>printf '%s' '{"schema_version":1,"ticket":"..."}' | USE_MOCK_LLM=true uv run python scripts/run_local_skill.py</code></td><td>Returns structured status, exit code, run ID, and artifact paths while keeping bundle state isolated.</td></tr>
           <tr><td>Resume after interruption</td><td><code>uv run python src/main.py --resume &lt;run-id&gt;</code></td><td>Reuses completed checkpoints and avoids repeating completed model stages.</td></tr>
           <tr><td>Inspect quality locally</td><td><code>bash scripts/verify.sh</code></td><td>Runs tests, Ruff, mypy, HTML checks, and the package build when available.</td></tr>
           <tr><td>Enable run evidence</td><td><code>PHOENIX_ENABLED=true ...</code></td><td>Writes local JSONL telemetry and optionally bridges to Phoenix.</td></tr>
@@ -245,7 +268,7 @@
       </table>
     </section>
 
-    <section class="card" aria-labelledby="safety-title">
+    <section class="card" id="safety" aria-labelledby="safety-title">
       <h2 id="safety-title">What keeps the journey trustworthy</h2>
       <details open><summary>Blocking is the default</summary><p>Unresolved refinement questions and high-severity gaps stop approval. Draft mode exists for exploration and stays visibly provisional.</p></details>
       <details><summary>Evidence survives interruption</summary><p>Each completed stage writes an atomic checkpoint. Resume validates the run configuration and continues from the last completed stage.</p></details>
@@ -253,7 +276,7 @@
       <details><summary>PDF is an optional presentation surface</summary><p>Markdown, stakeholder HTML, and case-study HTML remain available if a local Chromium renderer is unavailable. The CLI reports the PDF warning instead of losing the planning record.</p></details>
     </section>
 
-    <section class="card" aria-labelledby="next-title">
+    <section class="card" id="next" aria-labelledby="next-title">
       <h2 id="next-title">Where to go next</h2>
       <p>Start with the <a href="../../README.md">README</a>, review the <a href="IMPLEMENTATION_DASHBOARD.html">implementation dashboard</a>, then open the generated <code>FEATURE_CASE_STUDY.html</code> after your first run.</p>
       <p class="muted">This guide is intentionally usable by opening the file directly. No web server, video host, or external JavaScript dependency is required.</p>

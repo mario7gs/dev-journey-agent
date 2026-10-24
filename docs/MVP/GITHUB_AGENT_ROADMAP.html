@@ -54,18 +54,40 @@
     footer { max-width:1120px; margin:0 auto; padding:0 1.2rem 2rem; color:var(--muted); text-align:center; font-size:.8rem; }
     @media (max-width:760px) { .grid,.two-col { grid-template-columns:1fr; } .card { overflow-x:auto; } table { min-width:680px; } }
     @media print { @page { size:A4; margin:12mm; } body { background:#fff; font-size:10pt; } header { margin:-12mm -12mm 0; padding:12mm; print-color-adjust:exact; } main { margin:-1rem 0 2rem; padding:0; } .card,.phase { box-shadow:none; break-inside:avoid; } }
+    /* Frozen presentation contract: logo lockup plus sticky section navigation. */
+    html { scroll-behavior: smooth; }
+    header.site-header { position: sticky; top: 0; z-index: 20; padding: 0; color: var(--paper); background: linear-gradient(135deg, var(--ink), #163f52); border-bottom: 1px solid rgba(255,255,255,.14); box-shadow: 0 8px 24px rgba(11,18,32,.16); }
+    .site-header-inner { max-width: 1200px; margin: 0 auto; padding: .78rem 1rem; display: flex; flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .site-brand { display: flex; align-items: center; gap: .7rem; color: var(--paper); text-decoration: none; min-width: max-content; }
+    .site-brand .brand-mark-frame { width: 2.8rem; height: 2.8rem; flex: 0 0 auto; }
+    .site-brand .brand-mark-frame img { width: 100%; height: 100%; display: block; }
+    .site-brand .brand-name, .site-brand .brand-subtitle { display: block; }
+    .site-brand .brand-name { font-size: .74rem; }
+    .site-brand .brand-subtitle { margin-top: .2rem; font-size: .58rem; }
+    .site-nav { display: flex; align-items: center; gap: .35rem; flex-wrap: wrap; width: 100%; }
+    .site-nav a { color: var(--paper); text-decoration: none; padding: .38rem .62rem; border: 1px solid rgba(255,255,255,.25); border-radius: 999px; font-size: .76rem; font-weight: 750; line-height: 1.1; }
+    .site-nav a:hover, .site-nav a:focus-visible { background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.55); }
+    header.report-hero > .lockup, header.report-hero > .brand-lockup { display: none; }
+    section[id], header[id] { scroll-margin-top: 6rem; }
+    @media print { header.site-header { display: none; } }
   </style>
 </head>
 <body>
-  <header>
-    <div class="lockup"><div class="mark"><img src="../assets/dj-mark.png" alt="Dev Journey Agent mark"></div><div><div class="brand-name">DEV JOURNEY</div><div class="brand-subtitle">AGENT · GITHUB IMPLEMENTATION PATH</div></div></div>
+  <header class="site-header" aria-label="GitHub roadmap navigation">
+    <div class="site-header-inner">
+      <a class="site-brand" href="#overview" aria-label="Dev Journey Agent overview"><span class="brand-mark-frame"><img src="../assets/dj-mark.png" alt="Dev Journey Agent mark"></span><span><span class="brand-name">DEV JOURNEY</span><span class="brand-subtitle">AGENT · FEATURE PLANNING COPILOT</span></span></a>
+      <nav class="site-nav" aria-label="GitHub roadmap sections"><a href="#overview">Overview</a><a href="#status">Status</a><a href="#target">Target</a><a href="#phases">Phases</a><a href="#workflow">Workflow</a><a href="#security">Security</a><a href="#acceptance">Acceptance</a><a href="#queue">Queue</a><a href="#portfolio">Portfolio</a><a href="#log">Log</a></nav>
+    </div>
+  </header>
+  <header class="report-hero" id="overview">
+    <div class="lockup"><div class="mark"><img src="../assets/dj-mark.png" alt="Dev Journey Agent mark"></div><div><div class="brand-name">DEV JOURNEY</div><div class="brand-subtitle">AGENT · FEATURE PLANNING COPILOT</div></div></div>
     <div class="eyebrow">Living delivery plan</div>
     <h1>Turn the local MVP into a GitHub-native agent.</h1>
     <p class="hero-copy">This document is the source of truth for the transition from a tested local CLI to a private, reviewable GitHub Action that produces planning evidence without exposing credentials or making unreviewed code changes.</p>
   </header>
 
   <main>
-    <section class="card summary" aria-labelledby="status-title">
+    <section class="card summary" id="status" aria-labelledby="status-title">
       <h2 id="status-title">Current status</h2>
       <div class="grid">
         <div class="metric"><strong>Local MVP</strong><span class="status done">COMPLETE</span></div>
@@ -75,7 +97,7 @@
       <p class="callout"><strong>Repository:</strong> <code>mario7gs/dev-journey-agent</code> is private, uses <code>main</code>, and contains the reviewed baseline, CI quality workflow, packaged CLI, and manual planning action. No credential was written to the project.</p>
     </section>
 
-    <section class="card" aria-labelledby="target-title">
+    <section class="card" id="target" aria-labelledby="target-title">
       <h2 id="target-title">Target operating model</h2>
       <div class="two-col">
         <div><h3>Developer experience</h3><p>A developer starts a manual workflow with a ticket, repository, branch, and mode. The action runs the same validated pipeline as the local CLI and uploads Markdown, HTML, PDF, and case-study artifacts.</p></div>
@@ -84,7 +106,7 @@
       <p class="muted">Recommended first integration: <code>workflow_dispatch</code> with read-only repository access. Add automatic issue/PR triggers only after the manual flow is trusted.</p>
     </section>
 
-    <section class="card" aria-labelledby="phases-title">
+    <section class="card" id="phases" aria-labelledby="phases-title">
       <h2 id="phases-title">Implementation phases</h2>
       <div class="phase" data-number="0"><h3>Baseline and repository setup <span class="status done">DONE LOCALLY</span></h3><p>The local MVP has tests, CI definitions, exports, checkpoints, telemetry, a user journey guide, and operations documentation.</p><ul><li>Create or connect the private GitHub repository.</li><li>Tag the first local baseline release.</li><li>Keep secrets outside source, artifacts, and telemetry.</li></ul></div>
       <div class="phase" data-number="1"><h3>Package the CLI <span class="status done">DONE</span></h3><p>Make the agent installable and callable as a stable command rather than relying on checkout-specific path setup.</p><ul><li>Add a <code>dev-journey</code> console entry point.</li><li>Preserve <code>uv</code> lockfile and mock mode.</li><li>Document versioning and upgrade behavior.</li></ul></div>
@@ -94,7 +116,7 @@
       <div class="phase" data-number="5"><h3>Release and adoption <span class="status done">DONE</span></h3><p>Validate the action against a fixture repository and publish a versioned release.</p><ul><li>Integration matrix covers normal, blocked, draft, and resumed runs.</li><li>Release evidence and ownership boundaries are documented.</li><li>The action is adopted in this private repository.</li></ul></div>
     </section>
 
-    <section class="card" aria-labelledby="workflow-title">
+    <section class="card" id="workflow" aria-labelledby="workflow-title">
       <h2 id="workflow-title">First workflow contract</h2>
       <pre><code>name: Dev Journey plan
 
@@ -128,12 +150,12 @@ jobs:
       <p class="muted">The contract is active as <code>.github/workflows/dev-journey-plan.yml</code>. The workflow preserves expected blocking/provisional exit code 2, uploads the generated evidence bundle, publishes <code>dev-journey/plan</code>, and can optionally comment on an issue or pull request.</p>
     </section>
 
-    <section class="card" aria-labelledby="security-title">
+    <section class="card" id="security" aria-labelledby="security-title">
       <h2 id="security-title">Non-negotiable safeguards</h2>
       <ul class="checklist"><li>Never place GitHub tokens, model keys, or short-lived credentials in the repository or generated documents.</li><li>Start with read-only permissions and manual dispatch.</li><li>Treat tickets and repository files as untrusted input that may contain prompt-injection text.</li><li>Keep approval with a human reviewer; do not auto-merge or auto-edit code in the first release.</li><li>Redact telemetry and configure retention before enabling external collectors.</li></ul>
     </section>
 
-    <section class="card" aria-labelledby="acceptance-title">
+    <section class="card" id="acceptance" aria-labelledby="acceptance-title">
       <h2 id="acceptance-title">Definition of done for the first GitHub release</h2>
       <table><thead><tr><th>Area</th><th>Acceptance evidence</th></tr></thead><tbody>
         <tr><td>Install</td><td>A clean runner installs the pinned agent and invokes <code>dev-journey --help</code>.</td></tr>
@@ -145,7 +167,7 @@ jobs:
       </tbody></table>
     </section>
 
-    <section class="card" aria-labelledby="queue-title">
+    <section class="card" id="queue" aria-labelledby="queue-title">
       <h2 id="queue-title">Next-session queue</h2>
       <p class="muted">Resume here when work continues. Complete each row in order and add evidence to this update log.</p>
       <table><thead><tr><th>Order</th><th>Task</th><th>Current state</th><th>Completion evidence</th></tr></thead><tbody>
@@ -154,31 +176,38 @@ jobs:
         <tr><td>3</td><td>Populate the private repository with the reviewed baseline and verify the default branch.</td><td><span class="status done">DONE</span></td><td>Remote <code>main</code> contains the baseline, CI workflow, and no credential files.</td></tr>
         <tr><td>4</td><td>Add the <code>dev-journey</code> console entry point and document versioned installation.</td><td><span class="status done">DONE</span></td><td><code>uv run dev-journey --help</code> passes; package metadata exposes the stable console command.</td></tr>
         <tr><td>5</td><td>Add the manual <code>workflow_dispatch</code> action with read-only permissions and artifact upload.</td><td><span class="status done">DONE</span></td><td>Action <code>.github/workflows/dev-journey-plan.yml</code> is present with <code>contents: read</code> and artifact upload.</td></tr>
-        <tr><td>6</td><td>Exercise blocked, draft, normal, and resumed runs, then prepare the first private-repository release.</td><td><span class="status done">DONE</span></td><td>Matrix passed with expected exit codes 2, 2, 0, and 0; tag <code>v0.1.0</code> is published.</td></tr>
+        <tr><td>6</td><td>Exercise blocked, draft, normal, and resumed runs, then prepare the first private-repository release.</td><td><span class="status done">DONE</span></td><td>Matrix passed with expected exit codes 2, 2, 0, and 0; a release tag remains a post-merge publishing step.</td></tr>
         <tr><td>7</td><td>Build the credential-free two-scenario portfolio demo and visual artifact index.</td><td><span class="status done">DONE</span></td><td><code>scripts/run_portfolio_demo.sh</code> produces approved and needs-input bundles plus <code>DEMO_SUMMARY.html</code>; focused verification passes.</td></tr>
       </tbody></table>
     </section>
 
-    <section class="card" aria-labelledby="portfolio-title">
+    <section class="card" id="portfolio" aria-labelledby="portfolio-title">
       <h2 id="portfolio-title">Portfolio quick-win delivered</h2>
       <p><span class="status done">DONE</span> The one-command demo produces two visibly different outcomes: an approved plan and an intentionally needs-input/draft plan.</p>
       <ul><li>Keep both scenarios credential-free and deterministic.</li><li>Store separate bundles and generate <code>DEMO_SUMMARY.html</code> with links to plans, checkpoints, telemetry, cost, and security evidence.</li><li>Make the wrapper exit <code>0</code> only when both expected outcomes and artifact assertions pass.</li></ul>
-      <p class="muted">MCP, local skill wrappers for Codex/Claude/OpenCode, hosted services, provider-specific chat adapters, automatic triggers, and richer dashboards are possible future features, not prerequisites for this milestone.</p>
+      <p class="muted">MCP, hosted services, provider-specific Codex/Claude/OpenCode/Gemini adapters, automatic triggers, and richer dashboards remain future features; the provider-neutral local skill wrapper is implemented and is not a provider-specific integration.</p>
     </section>
 
-    <section class="card" aria-labelledby="log-title">
+    <section class="card" id="log" aria-labelledby="log-title">
       <h2 id="log-title">Update log</h2>
       <table><thead><tr><th>Date</th><th>Step</th><th>Status</th><th>Evidence</th></tr></thead><tbody>
         <tr><td>2026-10-12</td><td>Documented GitHub-native implementation path</td><td><span class="status done">DONE</span></td><td>This living HTML roadmap was added and linked from the project documentation.</td></tr>
         <tr><td>2026-10-12</td><td>Initialized local Git baseline</td><td><span class="status done">READY</span></td><td>Local <code>main</code> branch is initialized; no commit was created because no Git author identity is configured.</td></tr>
         <tr><td>2026-10-12</td><td>GitHub connector authentication</td><td><span class="status done">VERIFIED</span></td><td>Authenticated account access and private repository listing were verified through the GitHub plugin.</td></tr>
         <tr><td>2026-10-14</td><td>Private repository connected</td><td><span class="status done">DONE</span></td><td><code>mario7gs/dev-journey-agent</code> verified private with push access and default branch <code>main</code>.</td></tr>
-        <tr><td>2026-10-14</td><td>Baseline, CLI package, and manual action</td><td><span class="status done">DONE</span></td><td>Baseline and CI are on <code>main</code>; the console command and manual workflow are published; 74 tests, lint, type checks, and HTML parsing pass.</td></tr>
-        <tr><td>2026-10-14</td><td>Release matrix and v0.1.0</td><td><span class="status done">DONE</span></td><td>Blocked, draft, normal, and resumed scenarios passed; the first private-repository release tag is published.</td></tr>
+        <tr><td>2026-10-14</td><td>Baseline, CLI package, and manual action</td><td><span class="status done">DONE</span></td><td>Baseline and CI are on <code>main</code>; the console command and manual workflow are published; 83 tests, lint, type checks, and HTML parsing pass.</td></tr>
+        <tr><td>2026-10-14</td><td>Release matrix</td><td><span class="status done">DONE</span></td><td>Blocked, draft, normal, and resumed scenarios passed; publishing the first release tag is deferred until the portfolio-ready branch is merged.</td></tr>
         <tr><td>2026-10-14</td><td>Review and team signals</td><td><span class="status done">DONE</span></td><td>Machine-readable status payloads, commit status publication, and opt-in issue/PR comments are implemented without source-code mutation.</td></tr>
         <tr><td>2026-10-14</td><td>Security and persistence</td><td><span class="status done">DONE</span></td><td>Redaction, CI secret scanning, provider budget reports, explicit checkpoint pruning, and 14-day controlled artifact retention are implemented and verified.</td></tr>
         <tr><td>2026-10-14</td><td>Portfolio quick-win decision</td><td><span class="status done">DONE</span></td><td>The two-scenario credential-free demo and <code>DEMO_SUMMARY.html</code> were selected as the next implementation milestone; MCP and other integrations remain deferred.</td></tr>
-        <tr><td>2026-10-15</td><td>Portfolio quick-win implementation</td><td><span class="status done">DONE</span></td><td>The wrapper, focused subprocess test, summary index, cost reports, and security evidence are implemented; the full suite passes with 74 tests.</td></tr>
+        <tr><td>2026-10-15</td><td>Portfolio quick-win implementation</td><td><span class="status done">DONE</span></td><td>The wrapper, focused subprocess test, summary index, cost reports, and security evidence are implemented; the full suite passes with 83 tests.</td></tr>
+        <tr><td>2026-10-15</td><td>Approved artifact contract</td><td><span class="status done">LOCKED</span></td><td>The official lockup, canonical palette, sticky section navigation, and print-safe behavior are now the frozen portfolio baseline.</td></tr>
+        <tr><td>2026-10-15</td><td>Provider-neutral local skill wrapper</td><td><span class="status done">DONE</span></td><td>Structured JSON request/response wrapper delegates to the existing CLI, isolates bundle state, redacts console evidence, and preserves exit codes.</td></tr>
+        <tr><td>2026-10-15</td><td>Delivery-hardening split</td><td><span class="status done">PART 2 DONE*</span></td><td>The portfolio evidence refresh, frozen artifact-contract verification, HTML deck, and LinkedIn/GitHub publication kit are complete. *PDF visual QA and <code>uv build</code> remain environment-dependent follow-ups.</td></tr>
+        <tr><td>2026-10-23</td><td>Real repository validation</td><td><span class="status done">DONE</span></td><td>The approved health-check run returned exit 0 against the private repository; the complementary ambiguous-ticket case correctly returned <code>needs_input</code> with exit 2. See <a href="REAL_TEST_CASE_REPORT.md">sanitized validation report</a>.</td></tr>
+        <tr><td>2026-10-23</td><td>Repeatable real-test runner</td><td><span class="status done">DONE</span></td><td><code>scripts/run_real_test_case.sh</code> now validates both outcomes with a pre-exported-token guard and separate evidence bundles.</td></tr>
+        <tr><td>2026-10-23</td><td>Portfolio handoff packet</td><td><span class="status done">READY</span></td><td><a href="PORTFOLIO_HANDOFF.md">Reviewer-first handoff guide</a> links the deck, demo, validation proof, engineering boundaries, release gate, and deferred scope.</td></tr>
+        <tr><td>2026-10-23</td><td>Repository and presentation polish</td><td><span class="status done">DONE</span></td><td>The README, contribution/security guidance, portfolio deck, and HR-friendly LinkedIn narrative now use one plain-language story with technical evidence behind it.</td></tr>
       </tbody></table>
     </section>
 
