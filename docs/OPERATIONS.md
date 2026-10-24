@@ -105,9 +105,9 @@ contract was verified. The release suite is green, including tests, secret
 audit, type checking, and HTML parsing.
 
 Part 2 is implemented: it adds the six-section HTML portfolio deck at
-`artifacts/portfolio/DEV_JOURNEY_PORTFOLIO_DECK.html` and the publication kit at
-`docs/PORTFOLIO_PUBLICATION_KIT.md`, including LinkedIn copy, a GitHub README
-insert, screenshot captions, a walkthrough, and a claim-to-evidence map.
+`artifacts/portfolio/DEV_JOURNEY_PORTFOLIO_DECK.html`, a recruiter-facing
+carousel at `artifacts/linkedin/DEV_JOURNEY_AGENT_LINKEDIN_CAROUSEL.pdf`, and
+the corresponding plain-language positioning in `README.md`.
 
 PDF visual QA and the package build were attempted. Chrome and Firefox both
 crash before rendering in the current sandbox, and `uv build` cannot fetch the
