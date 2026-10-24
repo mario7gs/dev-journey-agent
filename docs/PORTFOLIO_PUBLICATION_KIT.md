@@ -10,36 +10,66 @@ Dev Journey Agent turns a vague development ticket into a reviewable feature
 plan with requirements, tests, approval gates, resumable checkpoints, and
 redacted evidence.
 
-## LinkedIn post — HR-friendly version
+## LinkedIn post — publish-ready
 
-I built Dev Journey Agent to solve a simple problem in software work:
-important decisions often remain hidden between a short request and the start
-of implementation.
+Most delivery problems do not start in code.
 
-Someone can write “add a health check” in a few words. A team still needs to
-agree on what the feature should do, how success will be measured, and which
-questions must be answered before work begins.
+They start earlier, when a request sounds clear but the team has not yet made
+the decisions that shape the solution.
 
-Dev Journey Agent turns that request into a clear, reviewable plan. It can:
+I built Dev Journey Agent to make that gap explicit.
 
-- explain the work in plain language;
-- make success criteria and risks visible;
-- connect the plan to tests and evidence; and
-- stop and ask for clarification when the request is too vague.
+It takes an early development request and turns it into a reviewable planning
+package: repository context, clarified requirements, definition of done,
+test-oriented cases, a critic gate, checkpoints, and evidence. The purpose is
+not to replace the people making the decision. It is to give them a clearer
+starting point before source-code changes begin.
 
-I tested it with two cases. A clear request produced an approved plan. An
-ambiguous request stopped safely and asked for the missing information. The
-project also keeps a recoverable record of each run and avoids storing
-credentials in its artifacts.
+The important rule is that it does not force an answer. When the evidence
+supports a plan, it produces an approved result. When a material gap remains,
+it stops and names the question that needs human input.
 
-The result is intentionally small: a command-line tool, a manual GitHub
-workflow, and a provider-neutral local wrapper. The goal is not to claim a
-fully autonomous software engineer. The goal is to show how AI can make the
-start of technical work clearer, safer, and easier to review.
+I validated both outcomes: a read-only repository case produced an approved
+health-check plan, while an intentionally ambiguous request returned
+`needs_input` instead of presenting an unreliable plan.
 
-Demo and evidence: `artifacts/demo/DEMO_SUMMARY.html`
+The scope is deliberately small and inspectable: a CLI, a manual GitHub
+Action, and a provider-neutral local wrapper. It does not change source code,
+create pull requests, or deploy anything automatically.
 
-## Technical LinkedIn draft
+The attached carousel explains the problem, workflow, decision gate, outputs,
+and evidence. The public repository and validation material are here:
+https://github.com/mario7gs/dev-journey-agent
+
+## LinkedIn document carousel
+
+Upload [`DEV_JOURNEY_AGENT_LINKEDIN_CAROUSEL.pdf`](../artifacts/linkedin/DEV_JOURNEY_AGENT_LINKEDIN_CAROUSEL.pdf)
+as a LinkedIn document with the post above. It is an eight-page square carousel
+designed to be readable on mobile and desktop.
+
+Suggested document title: **Dev Journey Agent: from request to reviewable
+plan**
+
+The page sequence is deliberate:
+
+1. A feature request is not an implementation plan.
+2. The interpretation gap before code.
+3. The proposed planning method.
+4. The six-stage workflow.
+5. The approval or needs-input decision gate.
+6. The artifacts a reviewer can inspect.
+7. The two validation outcomes.
+8. The implemented scope and deliberate boundaries.
+
+The editable source is also retained as
+[`DEV_JOURNEY_AGENT_LINKEDIN_CAROUSEL.pptx`](../artifacts/linkedin/DEV_JOURNEY_AGENT_LINKEDIN_CAROUSEL.pptx).
+
+## First comment (optional)
+
+The source, two-scenario demo, and real test-case report are public in the
+repository: https://github.com/mario7gs/dev-journey-agent
+
+## LinkedIn post — technical alternative
 
 I built Dev Journey Agent, a small CLI-first planning copilot for the gap
 between a vague ticket and a safe implementation plan.
@@ -88,6 +118,9 @@ introducing provider-specific integrations.
    “The safety gate stops at ambiguity instead of inventing requirements.”
 4. `artifacts/portfolio/DEV_JOURNEY_PORTFOLIO_DECK.html`. Caption:
    “A compact case study of the product boundary, proof, and trust layer.”
+5. `artifacts/linkedin/DEV_JOURNEY_AGENT_LINKEDIN_CAROUSEL.pdf`. Caption:
+   “A concise explanation of the request-to-plan gap, the decision gate, and
+   the validation evidence.”
 
 ## Five-minute walkthrough
 
@@ -114,6 +147,6 @@ introducing provider-specific integrations.
 ## Publication notes
 
 Use the supplied v19 logo and the exact lockup `DEV JOURNEY` / `AGENT · FEATURE
-PLANNING COPILOT`. Keep screenshots focused on the evidence and the safety
-behavior. Avoid presenting the project as a hosted autonomous coding agent or
-claiming provider integrations that are not implemented.
+PLANNING COPILOT`. Keep screenshots and the carousel focused on the evidence
+and the safety behavior. Avoid presenting the project as a hosted autonomous
+coding agent or claiming provider integrations that are not implemented.

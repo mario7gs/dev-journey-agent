@@ -18,6 +18,7 @@ TDD roadmap → stakeholder export.
 - ✅ Frozen portfolio artifact contract: official lockup, sticky section navigation, and print-safe behavior
 - ✅ Provider-neutral local skill wrapper with structured JSON input/output and isolated run bundles
 - ✅ Portfolio exports: print-safe `FEATURE_SPEC.pdf`, `FEATURE_CASE_STUDY.html`, and presentation PDF
+- ✅ LinkedIn publication package: concise post copy plus an eight-page, visually verified PDF carousel
 - ✅ Release polish: CI quality gates, reproducible demo script, and operations/cost documentation
 - ✅ Phase 4 foundations: persisted-data redaction, bounded telemetry, run token/cost budgets, and controlled workflow artifacts
 - ✅ Phase 4 controls: CI secret audit, explicit checkpoint retention pruning, and provider-usage budget reports
@@ -34,6 +35,8 @@ stops and says what needs clarification. It does not change source code,
 merge pull requests, or deploy software.
 
 For a reviewer-first explanation, open the [portfolio handoff guide](docs/MVP/PORTFOLIO_HANDOFF.md).
+The [publication kit](docs/PORTFOLIO_PUBLICATION_KIT.md) includes the
+LinkedIn-ready post and [square PDF carousel](artifacts/linkedin/DEV_JOURNEY_AGENT_LINKEDIN_CAROUSEL.pdf).
 
 The visual system is documented in [`docs/BRAND_GUIDELINES.md`](docs/BRAND_GUIDELINES.md)
 and can be previewed as a standalone [HTML brand guide](docs/BRAND_GUIDELINES.html),
@@ -164,10 +167,11 @@ for the request/response contract and security boundaries.
 
 The engineering release gate and portfolio publication package are complete:
 the two-scenario demo evidence and frozen branded artifact contract are
-verified, and the HTML deck plus LinkedIn/GitHub kit are available. PDF visual
-QA and `uv build` remain environment-dependent follow-ups because the current
-sandbox cannot run its browser binaries or fetch Hatchling. The CLI and GitHub
-Action remain the core surfaces; provider integrations stay deferred.
+verified, and the HTML deck, LinkedIn/GitHub kit, and LinkedIn carousel PDF
+are available. The carousel was rendered and visually checked page by page.
+`uv build` remains an environment-dependent follow-up when the locked
+Hatchling backend is unavailable offline. The CLI and GitHub Action remain the
+core surfaces; provider integrations stay deferred.
 
 Every completed stage writes an atomic, versioned checkpoint under
 `.dev-journey/checkpoints/<run-id>/` (configurable with `CHECKPOINT_DIR`). If a
