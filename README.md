@@ -183,8 +183,8 @@ for the request/response contract and security boundaries.
 
 The engineering release gate and portfolio publication package are complete:
 the two-scenario demo evidence and frozen branded artifact contract are
-verified, and the HTML deck, LinkedIn/GitHub kit, and LinkedIn carousel PDF
-are available. The carousel was rendered and visually checked page by page.
+verified, and the HTML deck and LinkedIn carousel PDF are available. The
+carousel was rendered and visually checked page by page.
 `uv build` remains an environment-dependent follow-up when the locked
 Hatchling backend is unavailable offline. The CLI and GitHub Action remain the
 core surfaces; provider integrations stay deferred.
