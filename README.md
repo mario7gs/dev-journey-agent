@@ -4,26 +4,6 @@ Portfolio AI agent for turning a vague ticket and an optional GitHub repository
 into a traceable implementation plan: refinement → DoD/contracts → PRD/TRD →
 TDD roadmap → stakeholder export.
 
-## Status: Portfolio quick-win implemented
-
-- ✅ Blocking mode is the default: unresolved Step 0 questions stop approval
-- ✅ Draft mode continues for exploration but cannot be marked approved
-- ✅ Read-only GitHub context is assembled before refinement
-- ✅ Mock mode is deterministic and ticket-aware; `--demo` is an explicit fixture
-- ✅ Real mode uses LiteLLM primary → fallback → local model chain
-- ✅ Stable traceability IDs connect requirements, contracts, acceptance criteria, tests, security checks, and implementation steps
-- ✅ Critic validates cross-stage references before approval
-- ✅ Shared visual identity and brand tokens for HTML, PDF, and portfolio presentation surfaces
-- ✅ Brand compliance checks for the approved v19 logo, canonical palette, and generated portfolio artifacts
-- ✅ Frozen portfolio artifact contract: official lockup, sticky section navigation, and print-safe behavior
-- ✅ Provider-neutral local skill wrapper with structured JSON input/output and isolated run bundles
-- ✅ Portfolio exports: print-safe `FEATURE_SPEC.pdf`, `FEATURE_CASE_STUDY.html`, and presentation PDF
-- ✅ Recruiter-facing overview: an eight-page, visually verified PDF carousel
-- ✅ Release polish: CI quality gates, reproducible demo script, and operations/cost documentation
-- ✅ Phase 4 foundations: persisted-data redaction, bounded telemetry, run token/cost budgets, and controlled workflow artifacts
-- ✅ Phase 4 controls: CI secret audit, explicit checkpoint retention pruning, and provider-usage budget reports
-- Outputs: `FEATURE_SPEC.md` (developers) + `FEATURE_SPEC.html` / `FEATURE_SPEC.pdf` (stakeholders) + `FEATURE_CASE_STUDY.html` / `FEATURE_CASE_STUDY.pdf` (portfolio)
-
 ## What this project does
 
 In plain language, Dev Journey Agent helps a team answer one question before
