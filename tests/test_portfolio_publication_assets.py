@@ -18,12 +18,15 @@ def test_portfolio_publication_assets_follow_the_brand_contract() -> None:
     assert "@media print" in deck
     assert 'href="#product"' in deck
     assert 'href="#evidence"' in deck
-    assert "LinkedIn post — HR-friendly version" in kit
+    assert "LinkedIn post — publish-ready" in kit
+    assert "DEV_JOURNEY_AGENT_LINKEDIN_CAROUSEL.pdf" in kit
     assert "LinkedIn" in kit
     assert "GitHub" in kit
     assert "DEMO_SUMMARY.html" in kit
     assert "MCP" in kit
     assert "What this project does" in readme
     assert "PORTFOLIO_HANDOFF.md" in readme
+    assert (ROOT / "artifacts/linkedin/DEV_JOURNEY_AGENT_LINKEDIN_CAROUSEL.pdf").is_file()
+    assert (ROOT / "artifacts/linkedin/DEV_JOURNEY_AGENT_LINKEDIN_CAROUSEL.pptx").is_file()
     assert (ROOT / "CONTRIBUTING.md").is_file()
     assert (ROOT / "SECURITY.md").is_file()
