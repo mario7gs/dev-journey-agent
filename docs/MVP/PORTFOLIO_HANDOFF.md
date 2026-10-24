@@ -4,8 +4,8 @@ This is the shortest credible review path for the project. It is designed for
 a hiring manager, senior engineer, team lead, architect, or technology leader
 who wants to understand the value without studying the whole repository first.
 
-The [LinkedIn publication kit](../PORTFOLIO_PUBLICATION_KIT.md) includes a
-nontechnical post and an eight-page PDF carousel for the same story.
+The [eight-page PDF carousel](../../artifacts/linkedin/DEV_JOURNEY_AGENT_LINKEDIN_CAROUSEL.pdf)
+offers a concise recruiter-facing version of the same story.
 
 ## One-sentence positioning
 
@@ -84,7 +84,7 @@ offline.
 - [x] Approved artifact layout, logo, palette, and navigation are frozen.
 - [x] Provider-neutral local skill wrapper is implemented.
 - [x] Real repository and needs-input cases are documented and repeatable.
-- [x] HTML portfolio deck and LinkedIn/GitHub publication kit are available.
+- [x] HTML portfolio deck and recruiter-facing LinkedIn carousel are available.
 - [x] LinkedIn carousel PDF was rendered and visually checked page by page.
 - [ ] Run `uv build` in a normal environment with the locked Hatchling backend available.
 

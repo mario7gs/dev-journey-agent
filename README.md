@@ -18,7 +18,7 @@ TDD roadmap → stakeholder export.
 - ✅ Frozen portfolio artifact contract: official lockup, sticky section navigation, and print-safe behavior
 - ✅ Provider-neutral local skill wrapper with structured JSON input/output and isolated run bundles
 - ✅ Portfolio exports: print-safe `FEATURE_SPEC.pdf`, `FEATURE_CASE_STUDY.html`, and presentation PDF
-- ✅ LinkedIn publication package: concise post copy plus an eight-page, visually verified PDF carousel
+- ✅ Recruiter-facing overview: an eight-page, visually verified PDF carousel
 - ✅ Release polish: CI quality gates, reproducible demo script, and operations/cost documentation
 - ✅ Phase 4 foundations: persisted-data redaction, bounded telemetry, run token/cost budgets, and controlled workflow artifacts
 - ✅ Phase 4 controls: CI secret audit, explicit checkpoint retention pruning, and provider-usage budget reports
@@ -34,9 +34,25 @@ means, and produces a reviewable plan. When the request remains too vague, it
 stops and says what needs clarification. It does not change source code,
 merge pull requests, or deploy software.
 
-For a reviewer-first explanation, open the [portfolio handoff guide](docs/MVP/PORTFOLIO_HANDOFF.md).
-The [publication kit](docs/PORTFOLIO_PUBLICATION_KIT.md) includes the
-LinkedIn-ready post and [square PDF carousel](artifacts/linkedin/DEV_JOURNEY_AGENT_LINKEDIN_CAROUSEL.pdf).
+## Why this project matters
+
+Most delivery problems do not start in code. They start when a request sounds
+clear, but the team has not yet made the decisions that shape the solution.
+
+Dev Journey Agent makes that gap visible before implementation starts. It
+turns an early development request into a reviewable planning package with
+repository context, clarified requirements, a definition of done,
+test-oriented cases, an approval gate, checkpoints, and evidence. It does not
+replace the people making the decision; it gives them a clearer starting point.
+
+The workflow does not force an answer. When the evidence supports a plan, it
+produces an approved result. When a material gap remains, it stops and names
+the question that needs human input. The included validation demonstrates both
+outcomes: an approved read-only health-check plan and an intentionally
+ambiguous request that returns `needs_input`.
+
+For a reviewer-first explanation, open the [portfolio handoff guide](docs/MVP/PORTFOLIO_HANDOFF.md)
+or the [eight-page portfolio carousel](artifacts/linkedin/DEV_JOURNEY_AGENT_LINKEDIN_CAROUSEL.pdf).
 
 The visual system is documented in [`docs/BRAND_GUIDELINES.md`](docs/BRAND_GUIDELINES.md)
 and can be previewed as a standalone [HTML brand guide](docs/BRAND_GUIDELINES.html),

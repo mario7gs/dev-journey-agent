@@ -237,10 +237,11 @@ project stays useful, credible, and small enough to review.
   GitHub-ready presentation assets or guidance.
 
 The final portfolio package is available as the self-contained HTML deck at
-`artifacts/portfolio/DEV_JOURNEY_PORTFOLIO_DECK.html` and the publication kit
-at `docs/PORTFOLIO_PUBLICATION_KIT.md`. The CLI and GitHub Action stay the
-core supported surfaces; MCP, hosted services, provider-specific adapters, and
-automatic issue/PR integrations remain deferred. PDF export remains an
+`artifacts/portfolio/DEV_JOURNEY_PORTFOLIO_DECK.html`, the recruiter-facing
+carousel at `artifacts/linkedin/DEV_JOURNEY_AGENT_LINKEDIN_CAROUSEL.pdf`, and
+the plain-language positioning in `README.md`. The CLI and GitHub Action stay
+the core supported surfaces; MCP, hosted services, provider-specific adapters,
+and automatic issue/PR integrations remain deferred. PDF export remains an
 optional local capability: this sandbox's Chrome and Firefox binaries both
 crash before rendering, so the generated HTML remains the authoritative visual
 review surface until a working renderer is available.
@@ -278,10 +279,10 @@ environment-dependent follow-ups.
 
 The GitHub entry point now explains the product in plain language and links to
 the reviewer-first handoff. Added lightweight `CONTRIBUTING.md` and
-`SECURITY.md` guidance. The portfolio deck and publication kit now lead with
-the human problem, explain the workflow without assuming programming
-knowledge, and include an HR-friendly LinkedIn post while preserving the
-technical evidence for engineering readers.
+`SECURITY.md` guidance. The portfolio deck, recruiter-facing carousel, and
+README now lead with the human problem, explain the workflow without assuming
+programming knowledge, and preserve technical evidence for engineering
+readers.
 
 ## Next-session starting checklist
 

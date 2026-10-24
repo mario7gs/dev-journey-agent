@@ -3,11 +3,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def test_portfolio_publication_assets_follow_the_brand_contract() -> None:
+def test_portfolio_presentation_assets_follow_the_brand_contract() -> None:
     deck = (ROOT / "artifacts/portfolio/DEV_JOURNEY_PORTFOLIO_DECK.html").read_text(
         encoding="utf-8"
     )
-    kit = (ROOT / "docs/PORTFOLIO_PUBLICATION_KIT.md").read_text(encoding="utf-8")
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
 
     assert "DEV JOURNEY" in deck
@@ -18,14 +17,15 @@ def test_portfolio_publication_assets_follow_the_brand_contract() -> None:
     assert "@media print" in deck
     assert 'href="#product"' in deck
     assert 'href="#evidence"' in deck
-    assert "LinkedIn post — publish-ready" in kit
-    assert "DEV_JOURNEY_AGENT_LINKEDIN_CAROUSEL.pdf" in kit
-    assert "LinkedIn" in kit
-    assert "GitHub" in kit
-    assert "DEMO_SUMMARY.html" in kit
-    assert "MCP" in kit
+    assert 'href="../../README.md"' in deck
+    assert "PORTFOLIO_PUBLICATION_KIT.md" not in deck
     assert "What this project does" in readme
+    assert "Why this project matters" in readme
+    assert "Most delivery problems do not start in code." in readme
+    assert "When a material gap remains, it stops" in readme
+    assert "DEV_JOURNEY_AGENT_LINKEDIN_CAROUSEL.pdf" in readme
     assert "PORTFOLIO_HANDOFF.md" in readme
+    assert not (ROOT / "docs/PORTFOLIO_PUBLICATION_KIT.md").exists()
     assert (ROOT / "artifacts/linkedin/DEV_JOURNEY_AGENT_LINKEDIN_CAROUSEL.pdf").is_file()
     assert (ROOT / "artifacts/linkedin/DEV_JOURNEY_AGENT_LINKEDIN_CAROUSEL.pptx").is_file()
     assert (ROOT / "CONTRIBUTING.md").is_file()
