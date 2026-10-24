@@ -46,6 +46,14 @@
 │ - Salva FEATURE_SPEC.md / HTML / PDF per developer e stakeholder          │
 │ - Genera FEATURE_CASE_STUDY.html / PDF per la presentazione portfolio    │
 └──────────────────────────────────────────────────────────────────────────┘
+                                      │
+                                      ▼
+┌──────────────────────────────────────────────────────────────────────────┐
+│ Provider-neutral local skill wrapper                                      │
+│ - JSON in/out per agentic tools senza accoppiare il core a un provider    │
+│ - Delegazione sicura alla CLI, bundle isolati, console redatta            │
+│ - Preserva checkpoint, telemetry, contratto artefatti ed exit code         │
+└──────────────────────────────────────────────────────────────────────────┘
 🧩 Pillar di Ingegneria del Software Integrati
 Resilienza LLM: Fallback automatico dei modelli gestito tramite LiteLLM (primario → fallback → modello locale).
 Persistenza audit: checkpoint atomici e resume validato per ogni stage, con MEMORY.md append-only.
@@ -53,6 +61,7 @@ Guardrails deterministici: Validazione degli output e imposizione dei requisiti 
 Human-in-the-loop: blocking di default; draft mode continua l'analisi ma non consente l'approvazione.
 Osservabilità Phoenix: recorder JSONL opzionale con run ID, latenza, fallback, token/cost metadata e gate events; bridge OpenTelemetry lazy-loaded when `arize-phoenix-otel` is installed.
 Design system: identità D·J con D-delay flag, J-flagpole stabile, percorso ascendente che termina sul bordo della D e freccia contenuta; palette Ink/Indigo/Teal/Gold e token condivisi per HTML/PDF/presentazioni.
+Invocazione neutrale: `scripts/run_local_skill.py` accetta un contratto JSON versionato, mantiene le superfici CLI/GitHub Action come core e lascia MCP e gli adapter provider-specifici come integrazioni future.
 📂 Albero delle Cartelle del Progetto
 Plaintextdev-journey-agent/
 ├── MEMORY.md                   # Registro persistente dello stato e dei checkpoint completati
@@ -70,7 +79,12 @@ Plaintextdev-journey-agent/
 │   ├── FEATURE_SPEC.md/.html   # Report tecnico e stakeholder
 │   ├── IMPLEMENTATION_DASHBOARD.html
 │   ├── IMPLEMENTATION_ROADMAP.md
+│   ├── LOCAL_SKILL_WRAPPER.md  # Contratto JSON e confini di sicurezza
 │   └── OPERATIONS.md           # Privacy, recovery, costi e release checks
+│
+├── scripts/                  # Entry point riproducibili per utenti e agentic tools
+│   ├── run_local_skill.py    # Wrapper JSON provider-neutral
+│   └── run_portfolio_demo.sh # Demo portfolio credential-free
 │
 ├── src/                        # Source code dell'applicazione
 │   ├── __init__.py
@@ -114,5 +128,5 @@ Plaintextdev-journey-agent/
     ├── test_export.py
     ├── test_pipeline_modes.py
     ├── test_telemetry.py
-    └── ...                      # suite completa (73 test)
+    └── ...                      # suite completa (79 test)
 

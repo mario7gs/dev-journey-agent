@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dev Journey Agent · Portfolio deck</title>
+  <style>
+    :root { --ink:#0b1220; --ink-soft:#1e293b; --slate:#475569; --muted:#64748b; --mist:#f4f7fb; --paper:#fff; --indigo:#3157d5; --teal:#0f8b8d; --gold:#c89b3c; --line:#d8e0ec; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--mist); font:16px/1.5 Inter,system-ui,sans-serif; }
+    .site-header { position:sticky; top:0; z-index:20; background:linear-gradient(135deg,var(--ink),#163f52); box-shadow:0 8px 24px #0b122029; }
+    .site-header-inner { max-width:1280px; margin:auto; padding:14px 26px; display:flex; align-items:center; justify-content:space-between; gap:24px; }
+    .site-brand { display:flex; align-items:center; gap:12px; color:var(--paper); text-decoration:none; }
+    .site-brand img { width:44px; height:44px; }
+    .brand-name,.brand-subtitle { display:block; }
+    .brand-name { font-size:12px; font-weight:800; letter-spacing:.16em; line-height:1.2; }
+    .brand-subtitle { margin-top:4px; color:#ffffffb0; font-size:9px; letter-spacing:.1em; }
+    .site-nav { display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end; }
+    .site-nav a { color:var(--paper); text-decoration:none; padding:7px 11px; border:1px solid #ffffff40; border-radius:999px; font-size:12px; font-weight:750; }
+    .site-nav a:hover,.site-nav a:focus-visible { background:#ffffff24; border-color:#ffffff8c; }
+    main { max-width:1280px; margin:auto; padding:28px; }
+    .slide { min-height:calc(100vh - 108px); margin:0 0 28px; padding:64px 72px; display:flex; flex-direction:column; justify-content:center; background:var(--paper); border:1px solid var(--line); box-shadow:0 14px 38px #0f172a12; scroll-margin-top:92px; page-break-after:always; }
+    .slide:last-child { page-break-after:auto; }
+    .eyebrow { color:var(--teal); font-size:13px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; }
+    h1 { max-width:900px; margin:12px 0 20px; font-size:clamp(42px,6vw,76px); line-height:1.02; letter-spacing:-.04em; }
+    h2 { margin:10px 0 18px; font-size:clamp(32px,4vw,52px); line-height:1.05; letter-spacing:-.03em; }
+    h3 { margin:0 0 8px; font-size:22px; }
+    p { max-width:820px; color:var(--slate); font-size:20px; }
+    .meta { color:var(--muted); font:14px/1.45 "JetBrains Mono",ui-monospace,monospace; }
+    .route { display:grid; grid-template-columns:repeat(6,1fr); gap:0; margin:36px 0 12px; }
+    .route-step { position:relative; padding:20px 12px 0 0; border-top:4px solid var(--indigo); }
+    .route-step:before { content:""; position:absolute; left:0; top:-11px; width:16px; height:16px; border-radius:50%; background:var(--gold); border:3px solid var(--paper); box-shadow:0 0 0 1px var(--gold); }
+    .route-step strong { display:block; margin-top:8px; font-size:16px; }
+    .route-step span { display:block; margin-top:4px; padding-right:16px; color:var(--muted); font-size:13px; }
+    .split { display:grid; grid-template-columns:1.05fr .95fr; gap:48px; align-items:start; }
+    .callout { padding:20px 22px; border-left:5px solid var(--teal); background:#ddf3f2; }
+    .callout p { margin:0; font-size:22px; color:var(--ink-soft); }
+    .evidence { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin-top:18px; }
+    .evidence article { padding:20px; border:1px solid var(--line); border-radius:12px; }
+    .evidence article.approved { border-top:5px solid var(--teal); }
+    .evidence article.needs { border-top:5px solid var(--gold); }
+    .status { display:inline-block; padding:4px 9px; border-radius:999px; background:#e8edff; color:#294aa7; font:700 12px/1.2 "JetBrains Mono",ui-monospace,monospace; }
+    .proof { margin:8px 0 0; color:var(--muted); font-size:15px; }
+    ul { max-width:780px; padding-left:22px; color:var(--slate); font-size:20px; }
+    li + li { margin-top:10px; }
+    code { padding:2px 5px; border-radius:4px; background:#e8edff; color:#294aa7; font-size:.85em; }
+    a { color:var(--indigo); }
+    footer { max-width:1280px; margin:0 auto; padding:0 28px 28px; color:var(--muted); font-size:13px; }
+    @media (max-width:800px) { .site-header-inner { align-items:flex-start; flex-direction:column; } .site-nav { justify-content:flex-start; } main { padding:12px; } .slide { min-height:auto; padding:40px 26px; } .split,.evidence { grid-template-columns:1fr; } .route { grid-template-columns:repeat(2,1fr); gap:18px 0; } .route-step { border-top:0; border-left:4px solid var(--indigo); padding:0 12px 0 18px; } .route-step:before { top:0; left:-11px; } }
+    @media print { .site-header, footer { display:none; } body { background:white; } main { padding:0; } .slide { min-height:100vh; margin:0; border:0; box-shadow:none; } }
+  </style>
+</head>
+<body>
+  <header class="site-header" aria-label="Portfolio deck navigation"><div class="site-header-inner">
+    <a class="site-brand" href="#overview"><img src="../../docs/assets/dj-mark.png" alt="Dev Journey Agent mark"><span><span class="brand-name">DEV JOURNEY</span><span class="brand-subtitle">AGENT · FEATURE PLANNING COPILOT</span></span></a>
+    <nav class="site-nav" aria-label="Deck sections"><a href="#overview">Overview</a><a href="#problem">Problem</a><a href="#product">Product</a><a href="#evidence">Evidence</a><a href="#trust">Trust</a><a href="#takeaway">Takeaway</a></nav>
+  </div></header>
+  <main>
+    <section class="slide" id="overview"><p class="eyebrow">Portfolio case study · 2026</p><h1>A clearer way to start software work.</h1><p>A planning assistant that helps teams turn a short request into a practical, reviewable work plan before coding begins.</p><p class="meta">Dev Journey Agent · credential-free demo · 83-test release gate</p></section>
+    <section class="slide" id="problem"><p class="eyebrow">The problem</p><h2>Short requests often leave important decisions unstated.</h2><div class="split"><div><p>A request such as “add a health check” sounds simple, but a team still needs to agree on the expected behavior, what success looks like, and which questions must be answered first.</p><p>Dev Journey Agent creates that shared understanding before implementation time is spent.</p></div><div class="callout"><p><strong>Practical goal:</strong> reduce avoidable rework by making the plan visible before the code changes begin.</p></div></div></section>
+    <section class="slide" id="product"><p class="eyebrow">What it does</p><h2>It turns a short request into a clear sequence of decisions.</h2><div class="route"><div class="route-step"><strong>Read context</strong><span>Understand the project</span></div><div class="route-step"><strong>Clarify</strong><span>Find missing information</span></div><div class="route-step"><strong>Define success</strong><span>Agree what “done” means</span></div><div class="route-step"><strong>Plan the work</strong><span>Describe requirements and risks</span></div><div class="route-step"><strong>Check quality</strong><span>Connect work to tests</span></div><div class="route-step"><strong>Approve or ask</strong><span>Stop when clarity is missing</span></div></div><p class="meta">People can use it from the command line, a manual GitHub workflow, or another local AI tool.</p></section>
+    <section class="slide" id="evidence"><p class="eyebrow">The proof</p><h2>It can recommend approval, or stop and ask for clarity.</h2><div class="evidence"><article class="approved"><span class="status">approved · exit 0</span><h3>Health-check request</h3><p class="proof">The system produced a structured plan and a set of reviewable documents, with a clear success signal.</p></article><article class="needs"><span class="status">needs input · exit 2</span><h3>Vague improvement request</h3><p class="proof">The system asked which data source and search scope were intended instead of presenting an unreliable plan.</p></article></div><p class="meta">Open the live evidence index: <a href="../demo/DEMO_SUMMARY.html">DEMO_SUMMARY.html</a>.</p></section>
+    <section class="slide" id="trust"><p class="eyebrow">Why it can be trusted</p><h2>The boundaries are visible, testable, and deliberate.</h2><ul><li>It reads project context without changing the code.</li><li>Each run leaves a recoverable record so work is not lost.</li><li>Usage and saved evidence are limited and cleaned of credentials.</li><li>The demo works without provider keys, so anyone can inspect it.</li><li>Future integrations stay separate from the small core product.</li></ul></section>
+    <section class="slide" id="takeaway"><p class="eyebrow">Portfolio takeaway</p><h2>A small project that shows responsible AI product thinking.</h2><div class="callout"><p>It is useful immediately, easy to inspect, and honest about what it does not do. The value is visible in the behavior, the evidence, and the decisions behind the scope.</p></div><p class="meta">Run it: <code>bash scripts/run_portfolio_demo.sh</code><br>Read the publication kit: <a href="../../docs/PORTFOLIO_PUBLICATION_KIT.md">PORTFOLIO_PUBLICATION_KIT.md</a></p></section>
+  </main>
+  <footer>Dev Journey Agent · DEV JOURNEY · AGENT · FEATURE PLANNING COPILOT · local portfolio support asset</footer>
+</body>
+</html>

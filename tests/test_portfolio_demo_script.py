@@ -24,9 +24,14 @@ def test_portfolio_demo_generates_two_scenario_summary(tmp_path: Path) -> None:
 
     assert result.returncode == 0, result.stdout + result.stderr
     assert (output / "DEMO_SUMMARY.html").is_file()
-    assert "Two outcomes, one safe planning pipeline." in (output / "DEMO_SUMMARY.html").read_text(
-        encoding="utf-8"
-    )
+    summary = (output / "DEMO_SUMMARY.html").read_text(encoding="utf-8")
+    assert "Two outcomes, one safe planning pipeline." in summary
+    assert 'src="data:image/png;base64,' in summary
+    assert "AGENT · FEATURE PLANNING COPILOT" in summary
+    assert 'class="site-header"' in summary
+    assert 'href="#scenarios"' in summary
+    assert 'href="#evidence"' in summary
+    assert "position:sticky" in summary
 
     approved = json.loads((output / "approved/run-status.json").read_text(encoding="utf-8"))
     needs_input = json.loads((output / "needs-input/run-status.json").read_text(encoding="utf-8"))

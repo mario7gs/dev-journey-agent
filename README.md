@@ -14,11 +14,26 @@ TDD roadmap → stakeholder export.
 - ✅ Stable traceability IDs connect requirements, contracts, acceptance criteria, tests, security checks, and implementation steps
 - ✅ Critic validates cross-stage references before approval
 - ✅ Shared visual identity and brand tokens for HTML, PDF, and portfolio presentation surfaces
+- ✅ Brand compliance checks for the approved v19 logo, canonical palette, and generated portfolio artifacts
+- ✅ Frozen portfolio artifact contract: official lockup, sticky section navigation, and print-safe behavior
+- ✅ Provider-neutral local skill wrapper with structured JSON input/output and isolated run bundles
 - ✅ Portfolio exports: print-safe `FEATURE_SPEC.pdf`, `FEATURE_CASE_STUDY.html`, and presentation PDF
 - ✅ Release polish: CI quality gates, reproducible demo script, and operations/cost documentation
 - ✅ Phase 4 foundations: persisted-data redaction, bounded telemetry, run token/cost budgets, and controlled workflow artifacts
 - ✅ Phase 4 controls: CI secret audit, explicit checkpoint retention pruning, and provider-usage budget reports
 - Outputs: `FEATURE_SPEC.md` (developers) + `FEATURE_SPEC.html` / `FEATURE_SPEC.pdf` (stakeholders) + `FEATURE_CASE_STUDY.html` / `FEATURE_CASE_STUDY.pdf` (portfolio)
+
+## What this project does
+
+In plain language, Dev Journey Agent helps a team answer one question before
+coding starts: “Do we understand this request well enough to work on it?”
+
+It reads project context, asks for missing information, defines what success
+means, and produces a reviewable plan. When the request remains too vague, it
+stops and says what needs clarification. It does not change source code,
+merge pull requests, or deploy software.
+
+For a reviewer-first explanation, open the [portfolio handoff guide](docs/MVP/PORTFOLIO_HANDOFF.md).
 
 The visual system is documented in [`docs/BRAND_GUIDELINES.md`](docs/BRAND_GUIDELINES.md)
 and can be previewed as a standalone [HTML brand guide](docs/BRAND_GUIDELINES.html),
@@ -105,9 +120,54 @@ evidence. The wrapper exits `0` only when both expected scenarios pass.
 
 The original deterministic draft fixture remains available through
 `bash scripts/run_demo.sh`.
-MCP, Codex/Claude/OpenCode skill wrappers, hosted services, and other provider
-integrations remain possible future enhancements, not prerequisites for this
-portfolio experience.
+MCP, provider-specific Codex/Claude/OpenCode adapters, hosted services, and
+other provider integrations remain possible future enhancements, not
+prerequisites for this portfolio experience. The provider-neutral local wrapper now delegates to
+the existing CLI without changing the core surfaces.
+
+The first real-repository validation is documented in
+[`docs/MVP/REAL_TEST_CASE_REPORT.md`](docs/MVP/REAL_TEST_CASE_REPORT.md): an
+approved read-only run and a complementary `needs_input` safety case, with no
+credential values stored in the repository.
+
+For a reviewer-first route through the project, use the
+[`portfolio handoff guide`](docs/MVP/PORTFOLIO_HANDOFF.md). It links the deck,
+credential-free demo, real validation evidence, engineering boundaries, and
+release gate in the order they are easiest to evaluate.
+
+The same validation is repeatable with an already-exported token:
+
+```bash
+export GITHUB_TOKEN
+bash scripts/run_real_test_case.sh /tmp/dev-journey-real-test
+```
+
+The runner keeps the approved repository case and credential-free safety case
+in separate bundles and never writes the token to disk.
+
+### Provider-neutral local skill wrapper
+
+The local wrapper exposes the existing CLI through a structured JSON contract
+for agentic tools without introducing provider-specific integrations:
+
+```bash
+printf '%s' '{"schema_version":1,"ticket":"Add a health-check endpoint","mode":"blocking","out_dir":"artifacts/skill-runs/health-check"}' \
+  | USE_MOCK_LLM=true uv run python scripts/run_local_skill.py
+```
+
+It returns status, exit code, run ID, and artifact paths as JSON. The wrapper
+keeps checkpoints, memory, telemetry, and redacted console output inside the
+artifact bundle. See [`docs/MVP/LOCAL_SKILL_WRAPPER.md`](docs/MVP/LOCAL_SKILL_WRAPPER.md)
+for the request/response contract and security boundaries.
+
+### Delivery-hardening status
+
+The engineering release gate and portfolio publication package are complete:
+the two-scenario demo evidence and frozen branded artifact contract are
+verified, and the HTML deck plus LinkedIn/GitHub kit are available. PDF visual
+QA and `uv build` remain environment-dependent follow-ups because the current
+sandbox cannot run its browser binaries or fetch Hatchling. The CLI and GitHub
+Action remain the core surfaces; provider integrations stay deferred.
 
 Every completed stage writes an atomic, versioned checkpoint under
 `.dev-journey/checkpoints/<run-id>/` (configurable with `CHECKPOINT_DIR`). If a

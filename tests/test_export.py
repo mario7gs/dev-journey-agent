@@ -91,6 +91,10 @@ def test_html_uses_dev_journey_brand_system():
     assert "FEATURE PLANNING COPILOT" in html
     assert "--dj-indigo: #3157d5" in html
     assert "Evidence-driven stakeholder report" in html
+    assert 'class="site-header"' in html
+    assert 'href="#planning"' in html
+    assert 'href="#tdd"' in html
+    assert "position: sticky" in html
 
 
 def test_html_uses_self_contained_png_brand_mark():
@@ -98,6 +102,18 @@ def test_html_uses_self_contained_png_brand_mark():
     assert 'src="data:image/png;base64,' in html
     assert ".svg" not in html
     assert "<svg" not in html
+
+
+def test_approved_brand_assets_are_identical():
+    import hashlib
+
+    paths = [
+        Path("src/templates/assets/dj-mark.png"),
+        Path("docs/assets/dj-mark.png"),
+        Path("docs/assets/logo-smooth-junction-v19.png"),
+    ]
+    digests = {hashlib.sha256(path.read_bytes()).hexdigest() for path in paths}
+    assert len(digests) == 1
 
 
 def test_write_docs_creates_files(tmp_path):

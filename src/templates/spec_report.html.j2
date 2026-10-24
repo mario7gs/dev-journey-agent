@@ -10,29 +10,39 @@
 </style>
 </head>
 <body>
-<header>
-  <div class="brand-lockup">
-    <div class="brand-mark-frame"><img src="{{ brand_mark_png_data_uri }}" alt="Dev Journey Agent mark"></div>
-    <div>
-      <div class="brand-name">DEV JOURNEY</div>
-      <div class="brand-subtitle">AGENT · FEATURE PLANNING COPILOT</div>
-    </div>
+<header class="site-header" aria-label="Report navigation">
+  <div class="site-header-inner">
+    <a class="site-brand" href="#overview" aria-label="Dev Journey Agent overview">
+      <span class="brand-mark-frame"><img src="{{ brand_mark_png_data_uri }}" alt="Dev Journey Agent mark"></span>
+      <span><span class="brand-name">DEV JOURNEY</span><span class="brand-subtitle">AGENT · FEATURE PLANNING COPILOT</span></span>
+    </a>
+    <nav class="site-nav" aria-label="Report sections">
+      <a href="#overview">Overview</a>
+      <a href="#status">Status</a>
+      <a href="#refinement">Refinement</a>
+      <a href="#planning">Planning</a>
+      <a href="#tdd">TDD</a>
+    </nav>
   </div>
+</header>
+<section class="report-hero" id="overview">
+  <div class="report-hero-inner">
   <div class="meta">{{ repo_ref }} · {{ branch }}</div>
   <h1>{{ title }}</h1>
   <div class="meta">Evidence-driven stakeholder report · {{ ticket }}</div>
   <div class="meta">Status: {{ status|upper }} · Mode: {{ mode }}{% if run_id %} · Run {{ run_id }}{% endif %}</div>
-</header>
+</div>
+</section>
 <main>
   {% if block_reasons or errors %}
-  <section class="card">
+  <section class="card" id="alerts">
     <h2>Pipeline status</h2>
     {% if block_reasons %}<h3>Blocking reasons</h3><ul>{% for reason in block_reasons %}<li>{{ reason }}</li>{% endfor %}</ul>{% endif %}
     {% if errors %}<h3>Errors</h3><ul>{% for error in errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
   </section>
   {% endif %}
 
-  <section class="card">
+  <section class="card" id="status">
     <h2>Critic Gate
       {% if status == 'approved' %}<span class="pill ok">APPROVED</span>
       {% elif status == 'draft' %}<span class="pill info">DRAFT</span>
@@ -43,7 +53,7 @@
     {% endfor %}
   </section>
 
-  <section class="card">
+  <section class="card" id="refinement">
     <h2>0 · Refinement</h2>
     <p>{{ refinement.get('refined_ticket', '') }}</p>
     {% if refinement.get('assumptions') %}
@@ -56,7 +66,7 @@
     {% endif %}
   </section>
 
-  <section class="card">
+  <section class="card" id="planning">
     <h2>1 · Contracts &amp; DoD</h2>
     <table><tr><th>ID</th><th>Kind</th><th>Name</th><th>Schema</th><th>Requirements</th><th>Status</th></tr>
     {% for c in dod.get('contracts', []) or [] %}
@@ -68,7 +78,7 @@
     <ol>{% for m in dod.get('milestones', []) or [] %}<li><code>{{ m.get('id') }}</code> <strong>{{ m.get('title') }}</strong> — {{ m.get('acceptance') }}</li>{% endfor %}</ol>
   </section>
 
-  <section class="card">
+  <section class="card" id="planning-security">
     <h2>2 · PRD / TRD / Security</h2>
     <p><strong>Goal:</strong> {{ prd.get('goal', '') }}</p>
     {% if prd.get('requirements') %}
@@ -90,7 +100,7 @@
     {% endfor %}</table>
   </section>
 
-  <section class="card">
+  <section class="card" id="tdd">
     <h2>3 · TDD Roadmap (target ≥{{ tdd.get('coverage_target', 80) }}%)</h2>
     <table><tr><th>ID</th><th>Test</th><th>Kind</th><th>Requirements</th><th>Contracts</th><th>Priority</th></tr>
     {% for t in tdd.get('test_cases', []) or [] %}

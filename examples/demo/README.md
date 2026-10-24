@@ -34,5 +34,11 @@ It produces:
 Both bundles are indexed by `DEMO_SUMMARY.html`, with links to generated plans,
 checkpoints, telemetry, cost evidence, and the security audit. The wrapper
 returns success only when both expected outcomes and their evidence files are
-present. MCP, chat-provider adapters, hosted services, and automatic issue/PR
-integrations remain deferred possible next features.
+present. The generated report, case-study, and summary use the official v19
+mark, shared color tokens, and sticky section navigation. This presentation
+contract is frozen for the portfolio MVP; visual changes require an explicit
+design decision and regenerated evidence. MCP, chat-provider adapters, hosted
+services, and automatic issue/PR integrations remain deferred possible next
+features. The provider-neutral local skill wrapper is now implemented as a
+thin JSON adapter around the existing CLI; see
+`docs/MVP/LOCAL_SKILL_WRAPPER.md` for its contract.

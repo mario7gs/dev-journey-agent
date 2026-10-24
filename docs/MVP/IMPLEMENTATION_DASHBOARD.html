@@ -93,10 +93,32 @@
       main { margin: -10mm 0 0; padding: 0; }
       .card { box-shadow: none; break-inside: avoid; }
     }
+    /* Frozen presentation contract: logo lockup plus sticky section navigation. */
+    html { scroll-behavior: smooth; }
+    header.site-header { position: sticky; top: 0; z-index: 20; padding: 0; color: var(--paper); background: linear-gradient(135deg, var(--ink), #163f52); border-bottom: 1px solid rgba(255,255,255,.14); box-shadow: 0 8px 24px rgba(11,18,32,.16); }
+    .site-header-inner { max-width: 1200px; margin: 0 auto; padding: .78rem 1rem; display: flex; flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .site-brand { display: flex; align-items: center; gap: .7rem; color: var(--paper); text-decoration: none; min-width: max-content; }
+    .site-brand .brand-mark-frame { width: 2.8rem; height: 2.8rem; flex: 0 0 auto; }
+    .site-brand .brand-mark-frame img { width: 100%; height: 100%; display: block; }
+    .site-brand .brand-name, .site-brand .brand-subtitle { display: block; }
+    .site-brand .brand-name { font-size: .74rem; }
+    .site-brand .brand-subtitle { margin-top: .2rem; font-size: .58rem; }
+    .site-nav { display: flex; align-items: center; gap: .35rem; flex-wrap: wrap; width: 100%; }
+    .site-nav a { color: var(--paper); text-decoration: none; padding: .38rem .62rem; border: 1px solid rgba(255,255,255,.25); border-radius: 999px; font-size: .76rem; font-weight: 750; line-height: 1.1; }
+    .site-nav a:hover, .site-nav a:focus-visible { background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.55); }
+    header.report-hero > .lockup, header.report-hero > .brand-lockup { display: none; }
+    section[id], header[id] { scroll-margin-top: 6rem; }
+    @media print { header.site-header { display: none; } }
   </style>
 </head>
 <body>
-  <header>
+  <header class="site-header" aria-label="Implementation dashboard navigation">
+    <div class="site-header-inner">
+      <a class="site-brand" href="#overview" aria-label="Dev Journey Agent overview"><span class="brand-mark-frame"><img src="../assets/dj-mark.png" alt="Dev Journey Agent mark"></span><span><span class="brand-name">DEV JOURNEY</span><span class="brand-subtitle">AGENT · FEATURE PLANNING COPILOT</span></span></a>
+      <nav class="site-nav" aria-label="Implementation dashboard sections"><a href="#overview">Overview</a><a href="#status">Status</a><a href="#roadmap">Roadmap</a><a href="#working">Working now</a><a href="#next">Next</a></nav>
+    </div>
+  </header>
+  <header class="report-hero" id="overview">
     <div class="lockup">
       <div class="mark"><img src="../assets/dj-mark.png" alt="Dev Journey Agent mark"></div>
       <div>
@@ -111,17 +133,17 @@
   </header>
 
   <main>
-    <section class="card summary" aria-labelledby="summary-title">
+    <section class="card summary" id="status" aria-labelledby="summary-title">
       <h2 id="summary-title">Current status</h2>
       <div class="grid">
-        <div class="metric"><span class="metric-value">6</span><span class="metric-label">delivery tracks complete</span></div>
-        <div class="metric"><span class="metric-value">0</span><span class="metric-label">queued enhancements</span></div>
-        <div class="metric"><span class="metric-value">74</span><span class="metric-label">automated tests passing</span></div>
+        <div class="metric"><span class="metric-value">7</span><span class="metric-label">delivery tracks complete</span></div>
+        <div class="metric"><span class="metric-value">0</span><span class="metric-label">queued implementations</span></div>
+        <div class="metric"><span class="metric-value">83</span><span class="metric-label">automated tests passing</span></div>
       </div>
       <p class="callout"><strong>Current state:</strong> the operational foundation and portfolio quick-win are complete. MCP and other integrations remain intentionally deferred.</p>
     </section>
 
-    <section class="card" aria-labelledby="roadmap-title">
+    <section class="card" id="roadmap" aria-labelledby="roadmap-title">
       <h2 id="roadmap-title">Delivery roadmap</h2>
       <table>
         <caption class="muted">Implemented and remaining project work</caption>
@@ -163,11 +185,17 @@
             <td>Two-scenario credential-free run with approved and needs-input outcomes, separate bundles, cost summaries, and security evidence.</td>
             <td>Maintain the wrapper and refresh the generated proof when the pipeline changes.</td>
           </tr>
+          <tr>
+            <td><strong>Provider-neutral local skill wrapper</strong></td>
+            <td><span class="status done">DONE</span></td>
+            <td>Structured JSON request/response adapter with isolated bundle state, redacted console evidence, and focused tests.</td>
+            <td>Keep the contract stable; provider adapters remain deferred.</td>
+          </tr>
         </tbody>
       </table>
     </section>
 
-    <section class="card" aria-labelledby="working-title">
+    <section class="card" id="working" aria-labelledby="working-title">
       <h2 id="working-title">Working now</h2>
       <ul>
         <li>Blocking mode is the default; unresolved refinement questions stop approval.</li>
@@ -179,9 +207,9 @@
       </ul>
     </section>
 
-    <section class="card" aria-labelledby="next-title">
-      <h2 id="next-title">Ongoing maintenance</h2>
-      <p>Keep the release checks green, refresh the two-scenario portfolio evidence when the pipeline changes, and perform final PDF visual review in an environment with a working Chromium renderer. MCP and other integrations remain future enhancements.</p>
+    <section class="card" id="next" aria-labelledby="next-title">
+      <h2 id="next-title">Next recommended step</h2>
+      <p>Part 2 is implemented: the two-scenario evidence is refreshed, the frozen branded artifact contract is checked, the publication kit and six-section HTML portfolio deck are available, and the release checks pass. PDF visual QA and <code>uv build</code> remain environment-dependent follow-ups because the local browser binaries crash and the sandbox cannot fetch Hatchling. MCP and provider-specific integrations remain deferred.</p>
       <p class="muted">Reference: <a href="IMPLEMENTATION_ROADMAP.md">implementation roadmap</a> · <a href="GITHUB_AGENT_ROADMAP.html">GitHub agent path</a> · <a href="../OPERATIONS.md">operations notes</a> · <a href="USER_JOURNEY.html">user journey</a> · <a href="../BRAND_GUIDELINES.html">brand guidelines</a></p>
     </section>
   </main>

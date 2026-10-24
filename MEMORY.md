@@ -251,4 +251,104 @@ scenarios: an approved health-check plan and a needs-input safety-gate plan.
 The wrapper writes separate evidence bundles, cost summaries, security-audit
 output, and `DEMO_SUMMARY.html`; it returns zero only after both expected
 outcomes and artifact assertions pass. Added focused subprocess verification;
-the full suite now passes 74 tests.
+the full suite now passes 75 tests.
+
+## [2026-10-15T18:55:00+02:00] Brand compliance audit — passed
+Audited the generated stakeholder report, case-study presentation, and
+`DEMO_SUMMARY.html` against the canonical brand guide. All now embed the
+approved v19 mark and use the shared Ink/Indigo/Teal/Mist/Paper/Line tokens;
+the older violet/mint case-study palette was removed. Source-level assertions,
+HTML parsing, and the full 75-test release suite pass. Browser/PDF rendering
+could not complete in this sandbox because the installed headless browsers
+crash at process level; CI or a local desktop renderer remains the final visual
+confirmation step.
+
+## [2026-10-15T19:20:00+02:00] Approved artifact contract — locked
+The stakeholder report, case-study presentation, and `DEMO_SUMMARY.html` now
+share the approved v19 logo lockup, canonical palette, and sticky semantic
+section navigation. This presentation baseline is frozen for the portfolio
+MVP; visual changes require an explicit design decision and refreshed tests and
+evidence. The provider-neutral local skill wrapper is now implemented as a
+thin JSON adapter around the existing CLI. It isolates bundle state, redacts
+console evidence, and preserves pipeline exit codes. MCP, provider-specific
+adapters, hosted services, and automatic issue/PR integrations remain deferred.
+
+## [2026-10-15T20:48:43+02:00] HTML navigation standardization — passed
+Standardized every project documentation HTML surface with the frozen sticky
+navigation contract: approved mark, `DEV JOURNEY`, exact
+`AGENT · FEATURE PLANNING COPILOT` subtitle, section buttons, semantic anchors,
+and print-safe behavior. The generated demo/report artifacts were audited and
+already comply. Added a documentation-wide regression check; the full suite
+now passes 80 tests.
+
+## [2026-10-15T21:03:14+02:00] Delivery-hardening split — Part 1 complete
+
+Completed the engineering release gate: reran the credential-free approved and
+needs-input portfolio scenarios, refreshed their separate evidence bundles and
+`DEMO_SUMMARY.html`, and verified the frozen branded HTML contract. Part 2 is
+queued for the next session: final PDF visual QA, package-build verification,
+publication handoff, and concise LinkedIn/GitHub portfolio support materials.
+The CLI and GitHub Action remain core surfaces; MCP and provider-specific
+integrations remain deferred.
+
+## [2026-10-19T18:54:10+02:00] Delivery-hardening Part 2 — implemented with environment follow-ups
+
+Added the self-contained six-section HTML portfolio deck and the publication
+kit with LinkedIn copy, GitHub README insert, screenshot captions, walkthrough,
+and claim-to-evidence map. The portfolio demo was refreshed and the release
+suite now passes 81 tests. PDF visual QA and `uv build` were attempted but the
+available browser binaries crash before rendering and the sandbox cannot fetch
+Hatchling; keep those as explicit follow-ups in a normal developer environment.
+
+## [2026-10-22T22:11:16+00:00] Repository-context — done
+not_requested
+
+## [2026-10-22T22:11:16+00:00] Step0-refinement — done
+mock: refined ticket — clarify search scope and data source
+
+## [2026-10-22T22:11:16+00:00] Pipeline-gate — needs-input
+High-severity gap: scope — mock gap: undefined search scope | Clarification required: mock: which data source?
+
+## [2026-10-23T00:12:42+02:00] Real validation — passed
+Recorded the operator's approved read-only run against
+`mario7gs/dev-journey-agent@main` for the health-check ticket: exit code 0,
+GitHub status success, run ID `1282e851d5ad49649fe66182c15f9ad6`, and the
+stakeholder/portfolio exports were generated. Reran the complementary
+credential-free ambiguous-ticket case: status needs_input, exit code 2, with
+the missing search scope/data source named explicitly. No credential value was
+stored; no repository, issue, pull request, merge, or deployment mutation was
+performed. Evidence is documented in `docs/MVP/REAL_TEST_CASE_REPORT.md`.
+
+## [2026-10-23T00:16:46+02:00] Real validation runner — implemented
+Added `scripts/run_real_test_case.sh` to repeat the approved repository case
+and the credential-free needs-input case with separate bundles. The runner
+requires a pre-exported token, never prints or persists it, unsets it before
+the safety case, and validates both status payloads and key artifacts. Added a
+missing-token regression test; the full suite now passes 83 tests.
+
+## [2026-10-23T00:22:09+02:00] Real validation runner — passed
+The operator executed `scripts/run_real_test_case.sh` successfully. The
+approved bundle returned status approved, GitHub success, and exit code 0 with
+run ID `bdaf8c0e5a5c4c18b2a07cf3d9de8d82`; the needs-input bundle returned
+needs_input, GitHub failure, and exit code 2 with run ID
+`f7082fe4864bb4f209a670666f81996b8`. The combined runner exited successfully.
+
+## [2026-10-23T00:25:13+02:00] Portfolio handoff — ready
+Added `docs/MVP/PORTFOLIO_HANDOFF.md` as the reviewer-first route through the
+deck, credential-free demo, external validation report, engineering boundaries,
+claim-to-evidence map, release gate, and deferred scope. The portfolio delivery
+path is complete; PDF visual QA and `uv build` remain environment-dependent
+follow-ups.
+
+## [2026-10-23T00:37:08+02:00] Public repository and presentation polish — passed
+Reframed the portfolio deck and publication kit for nontechnical and HR
+readers, added an HR-friendly LinkedIn post, and made the README explain the
+product in plain language. Added lightweight contribution and security policy
+guidance. The full 83-test release gate remains green and the secret audit
+passes.
+
+## [2026-10-24T00:00:00+02:00] GitHub portfolio publication — release correction
+The GitHub audit found no remote tag or release, so earlier historical wording
+claiming that `v0.1.0` was published is superseded. The tested release matrix
+is complete; creating the first tag/release is a deliberate post-merge
+publishing action, not completed evidence.
